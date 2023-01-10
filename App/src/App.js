@@ -18,6 +18,7 @@ function CreateEvent(props) {
         name: eventName,
         location: eventLocation,
         date: eventDate,
+        attendees: []
       })
     }).then((res) => {
       if (res.ok) {
@@ -68,6 +69,48 @@ function CreateEvent(props) {
 
 }
 
+function JoinEvent(props) {
+  const [attendeeName, setAttendeeName] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    fetch('http://localhost:3001/api/attendees', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        id: props.id,
+        name: attendeeName,
+      })
+    }).then((res) => {
+      if (res.ok) {
+        setAttendeeName('');
+        console.log(attendeeName)
+        props.updateEventList();
+      } else {
+        console.error('An error occurred');
+      }
+    })
+      .then(data => console.log(data))
+  };
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>
+        Attendee name:
+        <input
+          type="text"
+          value={attendeeName}
+          onChange={(e) => setAttendeeName(e.target.value)}
+        />
+      </label>
+      <br />
+      <button type="text">Submit</button>
+    </form>
+  )
+}
+
 function EventList() {
   const [events, setEvents] = useState([]);
 
@@ -101,7 +144,15 @@ function EventList() {
           <h3>{event.name}</h3>
           <p>{event.location}</p>
           <p>{event.date}</p>
-          {/* <button onClick={() => joinEvent(event.id)}>Join event</button> */}
+          <h4>Attendee</h4>
+          <ul>
+            {
+              event.attendees.map((attendee) => (
+                <li key={attendee}>{attendee}</li>
+              ))
+            }
+          </ul>
+          <JoinEvent id={event.id} updateEventList={updateEventList} />
         </div>
       ))}
     </div>
