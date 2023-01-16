@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Fire from './Firebase.js';
 
 function CreateEvent(props) {
   const [eventName, setEventName] = useState('');
@@ -8,6 +9,17 @@ function CreateEvent(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // writeEventData(eventName, eventLocation, eventDate)
+    // const saveToFirebase = FireBase.firestore();
+    // saveToFirebase.collection("Events").add({
+    //   id: uuidv4(),
+    //   EventName: eventName,
+    //   EventLocation: eventLocation,
+    //   EventDate: eventDate,
+
+    // })
+
 
     fetch('http://localhost:3001/api/events', {
       method: 'POST',
