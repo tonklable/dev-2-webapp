@@ -24,7 +24,7 @@ npm start
 
 Then, you can test the app.
 
-Update 2023/1/22
+*Update 2023/1/22*
 
 To use website, you have to register, so submit name and email first in the tab "Create User" first. The name and email will appear in Firebase as well.
 
