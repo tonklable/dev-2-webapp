@@ -1,5 +1,10 @@
-import React, { useState } from 'react';
-import Fire from './Firebase.js';
+
+import React, { useState, useEffect } from 'react';
+import Navbar from './components/navbar';
+import { CardSection } from './components/card';
+import { db } from "./Firebase";
+import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe } from "firebase/database";
+
 
 function CreateEvent(props) {
   const [eventName, setEventName] = useState('');
@@ -9,45 +14,19 @@ function CreateEvent(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const query = ref(db, "Events/" + Date.now());
+    set(query, {
+      name: eventName,
+      location: eventLocation,
+      date: eventDate
+    });
+    setEventName('');
+    setEventLocation('');
+    setEventDate('');
 
-    // writeEventData(eventName, eventLocation, eventDate)
-    // const saveToFirebase = FireBase.firestore();
-    // saveToFirebase.collection("Events").add({
-    //   id: uuidv4(),
-    //   EventName: eventName,
-    //   EventLocation: eventLocation,
-    //   EventDate: eventDate,
-
-    // })
-
-
-    fetch('http://localhost:3001/api/events', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: eventName,
-        location: eventLocation,
-        date: eventDate,
-        attendees: []
-      })
-    }).then((res) => {
-      if (res.ok) {
-        setEventName('');
-        setEventLocation('');
-        setEventDate('');
-        // console.log(res)
-        props.updateEventList();
-
-      } else {
-        console.error('An error occurred');
-      }
-    })
-      .then(data => console.log(data))
   };
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} key="CreateEvent">
       <label>
         Event name:
         <input
@@ -81,32 +60,106 @@ function CreateEvent(props) {
 
 }
 
+function CreateUser(props) {
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const query = ref(db, "Members/" + Date.now());
+    set(query, {
+      name: userName,
+      email: userEmail,
+    });
+    setUserName('');
+    setUserEmail('');
+  };
+  return (
+    <form onSubmit={handleSubmit} key="CreateUser">
+      <label>
+        User name:
+        <input
+          type="text"
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
+        />
+      </label>
+      <br />
+      <label>
+        User email:
+        <input
+          type="text"
+          value={userEmail}
+          onChange={(e) => setUserEmail(e.target.value)}
+        />
+      </label>
+      <br />
+      <button type="text">Create user</button>
+    </form>
+  )
+
+}
+
 function JoinEvent(props) {
   const [attendeeName, setAttendeeName] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const attendeeQuery = ref(db, "Members");
+    onValue(attendeeQuery, (snapshot) => {
+      if (snapshot.exists()) {
+        const attendees = snapshot.val();
+        Object.entries(attendees).forEach(([key, value]) => {
+          if (value.name === attendeeName) {
+            const memberKey = key;
+            console.log(memberKey);
+            const eventQuery = ref(db, "Events/" + props.id);
+            onValue(eventQuery, (snapshot) => {
+              if (snapshot.exists()) {
+                const event = snapshot.val();
 
-    fetch('http://localhost:3001/api/attendees', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        id: props.id,
-        name: attendeeName,
-      })
-    }).then((res) => {
-      if (res.ok) {
-        setAttendeeName('');
-        console.log(attendeeName)
-        props.updateEventList();
-      } else {
-        console.error('An error occurred');
+                const currentAttendees = event.attendees;
+
+                console.log(currentAttendees);
+                currentAttendees.push(memberKey);
+                console.log(currentAttendees);
+                update(eventQuery, { attendees: currentAttendees })
+              }
+            }, {
+              onlyOnce: true
+            })
+          }
+        });
+
       }
-    })
-      .then(data => console.log(data))
-  };
+    }
+    );
+
+
+  }
+
+
+  //   fetch('http://localhost:3001/api/attendees', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify({
+  //       id: props.id,
+  //       name: attendeeName,
+  //     })
+  //   }).then((res) => {
+  //     if (res.ok) {
+  //       setAttendeeName('');
+  //       console.log(attendeeName)
+  //       props.updateEventList();
+  //     } else {
+  //       console.error('An error occurred');
+  //     }
+  //   })
+  //     .then(data => console.log(data))
+  // };
   return (
     <form onSubmit={handleSubmit}>
       <label>
@@ -126,15 +179,43 @@ function JoinEvent(props) {
 function EventList() {
   const [events, setEvents] = useState([]);
 
+  // useEffect(() => {
+  //   const query = ref(db, "Events");
+  //   return onValue(query, (snapshot) => {
+  //     const data = snapshot.val();
+  //     console.log(data)
+  //     if (snapshot.exists()) {
+  //       Object.values(data).map((event) => {
+  //         setProjects((events) => [...events, event]);
+  //       });
+  //     }
+  //   });
+  // }, []);
+
   const fetchEvents = async () => {
-    try {
-      const res = await fetch('http://localhost:3001/api/events');
-      const data = await res.json();
+    const query = ref(db, "Events");
+    return onValue(query, (snapshot) => {
+      const data = snapshot.val();
       console.log(data)
-      setEvents(data)
-    } catch (error) {
-      console.error(error);
-    }
+      setEvents([]);
+      if (snapshot.exists()) {
+        Object.entries(data).forEach((event) => {
+          const attendeeID = event[1].attendees;
+          console.log(attendeeID);
+          const attendeeQuery = ref(db, "Members");
+          onValue(attendeeQuery, (snapshot) => {
+            if (snapshot.exists()) {
+              const attendees = snapshot.val();
+              const attendeeNames = attendeeID.map(id => attendees[id].name);
+              console.log(attendeeNames);
+              setEvents((events) => [...events, { id: event[0], name: event[1].name, location: event[1].location, date: event[1].date, attendees: attendeeNames }]);
+            }
+          }
+          )
+
+        });
+      }
+    });
   }
 
 
@@ -148,8 +229,13 @@ function EventList() {
 
   return (
     <div>
+      <h1>Create User</h1>
+      <CreateUser updateEventList={updateEventList} />
+      <br />
       <h1>Create Event</h1>
       <CreateEvent updateEventList={updateEventList} />
+      <br />
+
       <h2>Event List</h2>
       {events.map((event) => (
         <div key={event.id}>
@@ -165,6 +251,7 @@ function EventList() {
             }
           </ul>
           <JoinEvent id={event.id} updateEventList={updateEventList} />
+          <br />
         </div>
       ))}
     </div>
@@ -172,12 +259,25 @@ function EventList() {
 };
 
 function App() {
+  const [projects, setProjects] = useState([]);
+
+
   return (
+
     <div>
       {/* <h1>Create Event</h1>
       <CreateEvent />
       <h2>Event List</h2> */}
+      {/* <Navbar />
+      <CardSection /> */}
       <EventList />
+      {/* {projects.map((project) => (
+        <div>
+          <p>{project.name}</p>
+          <p>{project.location}</p>
+          <p>{project.date}</p>
+        </div>
+      ))} */}
     </div>
   );
 }
