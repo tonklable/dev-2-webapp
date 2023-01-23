@@ -119,10 +119,14 @@ function JoinEvent(props) {
               if (snapshot.exists()) {
                 const event = snapshot.val();
 
-                const currentAttendees = event.attendees;
+                var currentAttendees = event.attendees;
 
-                console.log(currentAttendees);
-                currentAttendees.push(memberKey);
+                if (currentAttendees != undefined) {
+                  currentAttendees.push(memberKey);
+                }
+                else {
+                  currentAttendees = { 0: memberKey };
+                }
                 console.log(currentAttendees);
                 update(eventQuery, { attendees: currentAttendees })
               }
@@ -202,16 +206,29 @@ function EventList() {
         Object.entries(data).forEach((event) => {
           const attendeeID = event[1].attendees;
           console.log(attendeeID);
-          const attendeeQuery = ref(db, "Members");
-          onValue(attendeeQuery, (snapshot) => {
-            if (snapshot.exists()) {
-              const attendees = snapshot.val();
-              const attendeeNames = attendeeID.map(id => attendees[id].name);
-              console.log(attendeeNames);
-              setEvents((events) => [...events, { id: event[0], name: event[1].name, location: event[1].location, date: event[1].date, attendees: attendeeNames }]);
+          if (attendeeID != undefined) {
+            const attendeeQuery = ref(db, "Members");
+            onValue(attendeeQuery, (snapshot) => {
+              if (snapshot.exists()) {
+                const attendees = snapshot.val();
+                const attendeeNames = attendeeID.map(id => attendees[id].name);
+                console.log(attendeeNames);
+
+                setEvents((events) => [...events, { id: event[0], name: event[1].name, location: event[1].location, date: event[1].date, attendees: attendeeNames }]);
+
+
+              }
             }
+            )
           }
-          )
+          else {
+            setEvents((events) => [...events, { id: event[0], name: event[1].name, location: event[1].location, date: event[1].date, attendees: [] }]);
+
+          }
+
+
+
+
 
         });
       }
