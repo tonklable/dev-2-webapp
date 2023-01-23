@@ -10,7 +10,7 @@ function CreateEvent(props) {
   const [eventName, setEventName] = useState('');
   const [eventLocation, setEventLocation] = useState('');
   const [eventDate, setEventDate] = useState('');
-
+  // Shi
 
   const handleSubmit = async (e) => {
     e.preventDefault();
