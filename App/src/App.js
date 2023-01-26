@@ -25,7 +25,6 @@ function CreateEvent(props) {
 
   };
 
-  // Ping
   return (
     <form onSubmit={handleSubmit} key="CreateEvent">
       <label>
