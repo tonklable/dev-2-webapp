@@ -113,7 +113,6 @@ function JoinEvent(props) {
         Object.entries(attendees).forEach(([key, value]) => {
           if (value.name === attendeeName) {
             const memberKey = key;
-            console.log(memberKey);
             const eventQuery = ref(db, "Events/" + props.id);
             onValue(eventQuery, (snapshot) => {
               if (snapshot.exists()) {
@@ -127,7 +126,6 @@ function JoinEvent(props) {
                 else {
                   currentAttendees = { 0: memberKey };
                 }
-                console.log(currentAttendees);
                 update(eventQuery, { attendees: currentAttendees })
               }
             }, {
@@ -144,26 +142,6 @@ function JoinEvent(props) {
   }
 
 
-  //   fetch('http://localhost:3001/api/attendees', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({
-  //       id: props.id,
-  //       name: attendeeName,
-  //     })
-  //   }).then((res) => {
-  //     if (res.ok) {
-  //       setAttendeeName('');
-  //       console.log(attendeeName)
-  //       props.updateEventList();
-  //     } else {
-  //       console.error('An error occurred');
-  //     }
-  //   })
-  //     .then(data => console.log(data))
-  // };
   return (
     <form onSubmit={handleSubmit}>
       <label>
@@ -183,36 +161,20 @@ function JoinEvent(props) {
 function EventList() {
   const [events, setEvents] = useState([]);
 
-  // useEffect(() => {
-  //   const query = ref(db, "Events");
-  //   return onValue(query, (snapshot) => {
-  //     const data = snapshot.val();
-  //     console.log(data)
-  //     if (snapshot.exists()) {
-  //       Object.values(data).map((event) => {
-  //         setProjects((events) => [...events, event]);
-  //       });
-  //     }
-  //   });
-  // }, []);
-
   const fetchEvents = async () => {
     const query = ref(db, "Events");
     return onValue(query, (snapshot) => {
       const data = snapshot.val();
-      console.log(data)
       setEvents([]);
       if (snapshot.exists()) {
         Object.entries(data).forEach((event) => {
           const attendeeID = event[1].attendees;
-          console.log(attendeeID);
           if (attendeeID != undefined) {
             const attendeeQuery = ref(db, "Members");
             onValue(attendeeQuery, (snapshot) => {
               if (snapshot.exists()) {
                 const attendees = snapshot.val();
                 const attendeeNames = attendeeID.map(id => attendees[id].name);
-                console.log(attendeeNames);
 
                 setEvents((events) => [...events, { id: event[0], name: event[1].name, location: event[1].location, date: event[1].date, attendees: attendeeNames }]);
 
@@ -246,6 +208,8 @@ function EventList() {
 
   return (
     <div>
+      <Navbar />
+
       <h1>Create User</h1>
       <CreateUser updateEventList={updateEventList} />
       <br />
@@ -253,7 +217,7 @@ function EventList() {
       <CreateEvent updateEventList={updateEventList} />
       <br />
 
-      <h2>Event List</h2>
+      <CardSection events={events} />
       {events.map((event) => (
         <div key={event.id}>
           <h3>{event.name}</h3>
@@ -285,8 +249,7 @@ function App() {
       {/* <h1>Create Event</h1>
       <CreateEvent />
       <h2>Event List</h2> */}
-      {/* <Navbar />
-      <CardSection /> */}
+
       <EventList />
       {/* {projects.map((project) => (
         <div>
