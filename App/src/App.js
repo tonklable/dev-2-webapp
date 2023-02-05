@@ -4,7 +4,7 @@ import Navbar from './components/navbar';
 import { CardSection } from './components/card';
 import { db } from "./Firebase";
 import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe } from "firebase/database";
-
+import Modal from "./components/Modal";
 
 function CreateEvent(props) {
   const [eventName, setEventName] = useState('');
@@ -160,7 +160,6 @@ function JoinEvent(props) {
 
 function EventList() {
   const [events, setEvents] = useState([]);
-
   const fetchEvents = async () => {
     const query = ref(db, "Events");
     return onValue(query, (snapshot) => {
@@ -208,14 +207,7 @@ function EventList() {
 
   return (
     <div>
-      <Navbar />
 
-      <h1>Create User</h1>
-      <CreateUser updateEventList={updateEventList} />
-      <br />
-      <h1>Create Event</h1>
-      <CreateEvent updateEventList={updateEventList} />
-      <br />
 
       <CardSection events={events} />
       {events.map((event) => (
@@ -240,15 +232,23 @@ function EventList() {
 };
 
 function App() {
-  const [projects, setProjects] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
 
+  console.log(openModal)
 
   return (
-
     <div>
+
       {/* <h1>Create Event</h1>
       <CreateEvent />
       <h2>Event List</h2> */}
+      <Navbar openModal={setOpenModal} />
+      <br />
+
+      {openModal && <Modal closeModal={setOpenModal} />}
+      <h1>Create User</h1>
+      <CreateUser />
+      <br />
 
       <EventList />
       {/* {projects.map((project) => (
