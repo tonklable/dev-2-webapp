@@ -4,7 +4,7 @@ import Navbar from './components/navbar';
 import { CardSection } from './components/card';
 import { db } from "./Firebase";
 import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe } from "firebase/database";
-import Modal from "./components/Modal";
+import Modal from "./components/CreateEvent";
 
 function CreateEvent(props) {
   const [eventName, setEventName] = useState('');
@@ -233,6 +233,7 @@ function EventList() {
 
 function App() {
   const [openModal, setOpenModal] = useState(false);
+  const [openLogin, setOpenLogin] = useState(false);
 
   console.log(openModal)
 
@@ -242,7 +243,7 @@ function App() {
       {/* <h1>Create Event</h1>
       <CreateEvent />
       <h2>Event List</h2> */}
-      <Navbar openModal={setOpenModal} />
+      <Navbar openModal={setOpenModal} openLogin={setOpenLogin} />
       <br />
 
       {openModal && <Modal closeModal={setOpenModal} />}
