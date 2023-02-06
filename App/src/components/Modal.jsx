@@ -30,7 +30,7 @@ const options = {
         next: () => <span>Next</span>,
     },
     datepickerClassNames: "top-12",
-    defaultDate: new Date("2022-01-01"),
+    defaultDate: new Date("2023-02-01"),
     language: "en",
 }
 
@@ -95,19 +95,8 @@ function Modal({ closeModal }) {
                                     <label for="Event Date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Event Date</label>
                                     <Datepicker options={options} onChange={handleChange} show={show} setShow={handleClose} />
                                 </div>
-                                {/* <div class="flex justify-between">
-                                    <div class="flex items-start">
-                                        <div class="flex items-center h-5">
-                                            <input id="remember" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required></input>
-                                        </div>
-                                        <label for="remember" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
-                                    </div>
-                                    <a href="#" class="text-sm text-blue-700 hover:underline dark:text-blue-500">Lost Password?</a>
-                                </div> */}
                                 <button type="submit" class="w-full text-white bg-[#ff6565] hover:bg-[#E44444] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add Event</button>
-                                {/* <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
-                                    Not registered? <a href="#" class="text-blue-700 hover:underline dark:text-blue-500">Create account</a>
-                                </div> */}
+
                             </form>
                         </div>
                     </div>
