@@ -41,6 +41,15 @@ function Modal({ closeModal }) {
     const [eventName, setEventName] = useState('');
     const [eventLocation, setEventLocation] = useState('');
     const [eventDate, setEventDate] = useState();
+    const [eventTime, setEventTime] = useState();
+    const [eventOwner, setEventOwner] = useState();
+    const [eventCapacity, setEventCapacity] = useState();
+    const [eventFood, setEventFood] = useState('');
+    const [eventCost, setEventCost] = useState('');
+    const [eventNote, setEventNote] = useState('');
+    const [eventStatus, setEventStatus] = useState(true);
+    const [eventTag, setEventTag] = useState('');
+
     const handleChange = (selectedDate) => {
         // setEventDate(selectedDate)
         console.log(selectedDate);
