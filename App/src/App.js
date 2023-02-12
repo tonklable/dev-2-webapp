@@ -7,60 +7,6 @@ import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe }
 import Modal from "./components/CreateEvent";
 import LoginModal from "./components/Login";
 
-function CreateEvent(props) {
-  const [eventName, setEventName] = useState('');
-  const [eventLocation, setEventLocation] = useState('');
-  const [eventDate, setEventDate] = useState('');
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const query = ref(db, "Events/" + Date.now());
-    set(query, {
-      name: eventName,
-      location: eventLocation,
-      date: eventDate
-    });
-    setEventName('');
-    setEventLocation('');
-    setEventDate('');
-
-  };
-
-  return (
-    <form onSubmit={handleSubmit} key="CreateEvent">
-      <label>
-        Event name:
-        <input
-          type="text"
-          value={eventName}
-          onChange={(e) => setEventName(e.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Event location:
-        <input
-          type="text"
-          value={eventLocation}
-          onChange={(e) => setEventLocation(e.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Event date:
-        <input
-          type="date"
-          value={eventDate}
-          onChange={(e) => setEventDate(e.target.value)}
-        />
-      </label>
-      <br />
-      <button type="text">Create event</button>
-    </form>
-  )
-
-}
-
 function CreateUser(props) {
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
@@ -176,7 +122,7 @@ function EventList() {
                 const attendees = snapshot.val();
                 const attendeeNames = attendeeID.map(id => attendees[id].name);
 
-                setEvents((events) => [...events, { id: event[0], name: event[1].name, location: event[1].location, date: event[1].date, attendees: attendeeNames }]);
+                setEvents((events) => [...events, { id: event[0], name: event[1].name, location: event[1].location, date: event[1].date, time: event[1].time, attendees: attendeeNames }]);
 
 
               }
@@ -184,7 +130,7 @@ function EventList() {
             )
           }
           else {
-            setEvents((events) => [...events, { id: event[0], name: event[1].name, location: event[1].location, date: event[1].date, attendees: [] }]);
+            setEvents((events) => [...events, { id: event[0], name: event[1].name, location: event[1].location, date: event[1].date, time: event[1].time, attendees: [] }]);
 
           }
 
