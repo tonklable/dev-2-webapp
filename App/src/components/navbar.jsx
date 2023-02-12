@@ -1,12 +1,16 @@
 import React from 'react';
 import { Search, Filter } from '../assets/icons'
 
-const Navbar = ({ openModal }) => {
+const Navbar = ({ openModal, openLogin }) => {
     return (
         <>
             <div class="h-[75px] bg-[#f1c470] drop-shadow-lg">
                 <div class="h-[70px] bg-[#ff6565] flex flex-wrap items-center">
-                    <h1 class='ml-3 text-3xl text-white font-poppins font-bold'>TyTime</h1>
+                    {/* <h1 class='ml-3 text-3xl text-white font-poppins font-bold'>TyTime</h1> */}
+                    <div class="grid grid-cols-12 sm:gap-2 gap-x-2 gap-y-0">
+                        <div class="col-span-1"><h1 class='ml-3 text-3xl text-white font-poppins font-bold'>TyTime</h1></div>
+                        <div class="col-start-10 col-span-3 sm:col-start-11 col-span-2 lg:col-start-12 col-span-1"><button class="bg-transparent hover:bg-white text-white font-semibold hover:text-[#ff6565] py-2 px-4 border border-white rounded-full" onClick={() => { openLogin(true) }}>Sign Up</button></div>
+                    </div>
                 </div>
             </div>
             <div class="grid grid-cols-9 sm:gap-2 gap-x-2 gap-y-0 mx-3">
