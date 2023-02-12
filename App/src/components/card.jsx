@@ -9,6 +9,9 @@ for (var i = 1; i <= 12; i++) {
 
 export const CardSection = (props) => {
     var cards = props.events
+    console.log("test")
+
+    console.log(cards)
     return (
         <>
             <div class="grid grid-cols-6 px-8 py-4 gap-4 h-full">
@@ -63,7 +66,7 @@ export const CardSection = (props) => {
                                     <div class="absolute p-1 pl-0">
                                         <Clock />
                                     </div>
-                                    <p class="text-[12px] ml-7 font-medium">18.00</p>
+                                    <p class="text-[12px] ml-7 font-medium">{card.time}</p>
                                 </div>
                                 <div class="flex items-center justify-center bg-[#37DF66] rounded-full h-6 w-14 mr-3">
                                     <p class="text-white font-semibold text-sm">OPEN</p>
