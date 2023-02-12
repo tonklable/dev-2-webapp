@@ -5,6 +5,7 @@ import { CardSection } from './components/card';
 import { db } from "./Firebase";
 import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe } from "firebase/database";
 import Modal from "./components/CreateEvent";
+import LoginModal from "./components/Login";
 
 function CreateEvent(props) {
   const [eventName, setEventName] = useState('');
@@ -236,6 +237,7 @@ function App() {
   const [openLogin, setOpenLogin] = useState(false);
 
   console.log(openModal)
+  console.log(openLogin)
 
   return (
     <div>
@@ -247,6 +249,8 @@ function App() {
       <br />
 
       {openModal && <Modal closeModal={setOpenModal} />}
+      {openLogin && <LoginModal closeModal={setOpenLogin} />}
+      
       <h1>Create User</h1>
       <CreateUser />
       <br />
