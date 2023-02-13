@@ -5,47 +5,48 @@ import { CardSection } from './components/card';
 import { db } from "./Firebase";
 import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe } from "firebase/database";
 import Modal from "./components/CreateEvent";
+import LoginModal from "./components/Login";
 
-function CreateUser(props) {
-  const [userName, setUserName] = useState('');
-  const [userEmail, setUserEmail] = useState('');
+// function CreateUser(props) {
+//   const [userName, setUserName] = useState('');
+//   const [userEmail, setUserEmail] = useState('');
 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const query = ref(db, "Members/" + Date.now());
-    set(query, {
-      name: userName,
-      email: userEmail,
-    });
-    setUserName('');
-    setUserEmail('');
-  };
-  return (
-    <form onSubmit={handleSubmit} key="CreateUser">
-      <label>
-        User name:
-        <input
-          type="text"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        User email:
-        <input
-          type="text"
-          value={userEmail}
-          onChange={(e) => setUserEmail(e.target.value)}
-        />
-      </label>
-      <br />
-      <button type="text">Create user</button>
-    </form>
-  )
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     const query = ref(db, "Members/" + Date.now());
+//     set(query, {
+//       name: userName,
+//       email: userEmail,
+//     });
+//     setUserName('');
+//     setUserEmail('');
+//   };
+//   return (
+//     <form onSubmit={handleSubmit} key="CreateUser">
+//       <label>
+//         User name:
+//         <input
+//           type="text"
+//           value={userName}
+//           onChange={(e) => setUserName(e.target.value)}
+//         />
+//       </label>
+//       <br />
+//       <label>
+//         User email:
+//         <input
+//           type="text"
+//           value={userEmail}
+//           onChange={(e) => setUserEmail(e.target.value)}
+//         />
+//       </label>
+//       <br />
+//       <button type="text">Create user</button>
+//     </form>
+//   )
 
-}
+// }
 
 function JoinEvent(props) {
   const [attendeeName, setAttendeeName] = useState('');
@@ -182,6 +183,7 @@ function App() {
   const [openLogin, setOpenLogin] = useState(false);
 
   console.log(openModal)
+  console.log(openLogin)
 
   return (
     <div>
@@ -193,9 +195,11 @@ function App() {
       <br />
 
       {openModal && <Modal closeModal={setOpenModal} />}
-      <h1>Create User</h1>
+      {openLogin && <LoginModal closeModal={setOpenLogin} />}
+      
+      {/* <h1>Create User</h1>
       <CreateUser />
-      <br />
+      <br /> */}
 
       <EventList />
       {/* {projects.map((project) => (
