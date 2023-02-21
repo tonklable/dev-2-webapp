@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "nodemon": "^2.0.20",
+    "react-time-picker": "^5.2.0"
+  }
+}
