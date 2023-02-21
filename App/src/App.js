@@ -6,6 +6,7 @@ import { db } from "./Firebase";
 import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe } from "firebase/database";
 import Modal from "./components/CreateEvent";
 import LoginModal from "./components/Login";
+import FullPage from "./components/FullPage";
 
 // function CreateUser(props) {
 //   const [userName, setUserName] = useState('');
@@ -105,8 +106,10 @@ function JoinEvent(props) {
   )
 }
 
-function EventList() {
+function EventList(props) {
   const [events, setEvents] = useState([]);
+  const [openFullpage, setOpenFullpage] = useState(false)
+  const [pageID, setPageID] = useState()
   const fetchEvents = async () => {
     const query = ref(db, "Events");
     return onValue(query, (snapshot) => {
@@ -122,7 +125,7 @@ function EventList() {
                 const attendees = snapshot.val();
                 const attendeeNames = attendeeID.map(id => attendees[id].name);
 
-                setEvents((events) => [...events, { id: event[0], name: event[1].name, location: event[1].location, date: event[1].date, time: event[1].time, attendees: attendeeNames }]);
+                setEvents((events) => [...events, { id: event[0], name: event[1].name, location: event[1].location, date: event[1].date, capacity:event[1].capacity, food:event[1].food,cost:event[1].cost,tag:event[1].tag,note:event[1].note,time:event[1].time, attendees: attendeeNames }]);
 
 
               }
@@ -130,7 +133,7 @@ function EventList() {
             )
           }
           else {
-            setEvents((events) => [...events, { id: event[0], name: event[1].name, location: event[1].location, date: event[1].date, time: event[1].time, attendees: [] }]);
+            setEvents((events) => [...events, { id: event[0], name: event[1].name, location: event[1].location, capacity:event[1].capacity, date: event[1].date,food:event[1].food,cost:event[1].cost,time:event[1].time,tag:event[1].tag,note:event[1].note,attendees: [] }]);
 
           }
 
@@ -154,9 +157,10 @@ function EventList() {
 
   return (
     <div>
+      {openFullpage && <FullPage closeFP={setOpenFullpage}  events={events} pageID={pageID} />}
 
 
-      <CardSection events={events} />
+      <CardSection events={events} setOpenFullpage={setOpenFullpage} setPageID={setPageID}/>
       {events.map((event) => (
         <div key={event.id}>
           <h3>{event.name}</h3>
@@ -181,12 +185,15 @@ function EventList() {
 function App() {
   const [openModal, setOpenModal] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
+  
 
   console.log(openModal)
   console.log(openLogin)
 
   return (
     <div>
+      {/* <button className="openFP" onClick={()=>{setOpenFullpage(true);}}> OpenFP </button> */}
+      
 
       {/* <h1>Create Event</h1>
       <CreateEvent />
@@ -209,6 +216,7 @@ function App() {
           <p>{project.date}</p>
         </div>
       ))} */}
+
     </div>
   );
 }
