@@ -41,6 +41,7 @@ function Navbar ({ user, openModal, openLogin }) {
                 <div class="h-[70px] bg-[#ff6565] flex flex-wrap items-center">
                     {/* <h1 class='ml-3 text-3xl text-white font-poppins font-bold'>TyTime</h1> */}
                     <div class="grid grid-cols-12 sm:gap-2 gap-x-2 gap-y-0">
+
                         <div class="items-center col-span-1"><h1 class='ml-3 text-3xl text-white font-poppins font-bold'>TyTime</h1></div>
                         <div class="flex justify-end items-center h-full mr-3 col-start-10 col-span-3 sm:col-start-11 sm:col-span-2">
                             {user ?
