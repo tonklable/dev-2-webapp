@@ -1,16 +1,63 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Filter } from '../assets/icons'
+import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
+import { db } from "../Firebase";
+import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe, child, get} from "firebase/database";
 
-const Navbar = ({ openModal, openLogin }) => {
+// const Navbar = ({ user, openModal, openLogin }) => {
+function Navbar ({ user, openModal, openLogin }) {
+    const auth = getAuth();
+
+    const handleSignOut = () => {
+        signOut(auth)
+            .then(() => {
+                console.log("Signed out.")
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
+    // retrieve username value from db based on uid
+    const usersRef = ref(db, 'Members');
+    const [username, setUsername] = useState("");
+    const userRef = user && user.uid ? child(usersRef, user.uid) : null;
+
+    useEffect(() => {
+        if (userRef) {
+          get(userRef).then((snapshot) => {
+            if (snapshot.exists()) {
+              setUsername(snapshot.val().name);
+            }
+          }, (error) => {
+            console.error(error);
+          });
+        }
+      }, [usersRef, user]);
+    
     return (
         <>
             <div class="h-[75px] bg-[#f1c470] drop-shadow-lg">
                 <div class="h-[70px] bg-[#ff6565] flex flex-wrap items-center">
                     {/* <h1 class='ml-3 text-3xl text-white font-poppins font-bold'>TyTime</h1> */}
                     <div class="grid grid-cols-12 sm:gap-2 gap-x-2 gap-y-0">
-                        <div class="col-span-1"><h1 class='ml-3 text-3xl text-white font-poppins font-bold'>TyTime</h1></div>
-                        <div class="col-start-10 col-span-3 sm:col-start-11 sm:col-span-2 lg:col-start-12 lg:col-span-1"><button class="bg-transparent hover:bg-white text-white font-semibold hover:text-[#ff6565] py-2 px-4 border border-white rounded-full" onClick={() => { openLogin(true) }}>Sign Up</button></div>
+
+                        <div class="items-center col-span-1"><h1 class='ml-3 text-3xl text-white font-poppins font-bold'>TyTime</h1></div>
+                        <div class="flex justify-end items-center h-full mr-3 col-start-10 col-span-3 sm:col-start-11 sm:col-span-2">
+                            {user ?
+                                <span class="text-right mr-3">
+                                    <p class="font-semibold">Welcome, {username}!</p>
+                                    <button class="bg-transparent hover:underline text-white" onClick={handleSignOut}>sign out</button>
+                                </span>
+                                // <button class="bg-transparent hover:bg-white text-white font-semibold hover:text-[#ff6565] py-2 px-4 border border-white rounded-full"
+                                //         onClick={handleSignOut}>Sign Out</button>
+                                :
+                                <button class="bg-transparent hover:bg-white text-white font-semibold hover:text-[#ff6565] py-2 px-4 border border-white rounded-full"
+                                        onClick={() => { openLogin(true) }}>Sign In</button>
+                            }
+                        </div>
                     </div>
+
                 </div>
             </div>
             <div class="grid grid-cols-9 sm:gap-2 gap-x-2 gap-y-0 mx-3">

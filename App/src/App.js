@@ -3,51 +3,12 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './components/navbar';
 import { CardSection } from './components/card';
 import { db } from "./Firebase";
-import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe } from "firebase/database";
+import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe, child, get} from "firebase/database";
 import Modal from "./components/CreateEvent";
-import LoginModal from "./components/Login";
 import FullPage from "./components/FullPage";
-
-// function CreateUser(props) {
-//   const [userName, setUserName] = useState('');
-//   const [userEmail, setUserEmail] = useState('');
-
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     const query = ref(db, "Members/" + Date.now());
-//     set(query, {
-//       name: userName,
-//       email: userEmail,
-//     });
-//     setUserName('');
-//     setUserEmail('');
-//   };
-//   return (
-//     <form onSubmit={handleSubmit} key="CreateUser">
-//       <label>
-//         User name:
-//         <input
-//           type="text"
-//           value={userName}
-//           onChange={(e) => setUserName(e.target.value)}
-//         />
-//       </label>
-//       <br />
-//       <label>
-//         User email:
-//         <input
-//           type="text"
-//           value={userEmail}
-//           onChange={(e) => setUserEmail(e.target.value)}
-//         />
-//       </label>
-//       <br />
-//       <button type="text">Create user</button>
-//     </form>
-//   )
-
-// }
+import LoginModal from "./components/Login";
+import UserSetupModal from './components/UserSetup';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 function JoinEvent(props) {
   const [attendeeName, setAttendeeName] = useState('');
@@ -185,10 +146,40 @@ function EventList(props) {
 function App() {
   const [openModal, setOpenModal] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
-  
+  const [openUserSetup, setOpenUserSetup] = useState(false);
 
   console.log(openModal)
   console.log(openLogin)
+
+  // track user status
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    const auth = getAuth();
+
+    onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) {
+        // // Check if this is a new user by checking creation time and last sign in time
+        // if (currentUser.metadata.creationTime === currentUser.metadata.lastSignInTime) {
+        //   // This is a new user, so redirect them to the modal component for filling out their display name and username
+        //   // history.push('/modal');
+        //   setOpenUserSetup(true);
+        // }
+
+        // Check if a new user by checking the uid existence in our db
+        const usersRef = ref(db, 'Members');
+        const userRef = child(usersRef, currentUser.uid);
+        get(userRef).then((snapshot) => {
+          if (!snapshot.exists()) {
+            setOpenUserSetup(true);
+          }
+        }, (error) => {
+          console.error(error);
+        });
+        
+      }
+    })
+  }, []);
 
   return (
     <div>
@@ -198,12 +189,15 @@ function App() {
       {/* <h1>Create Event</h1>
       <CreateEvent />
       <h2>Event List</h2> */}
-      <Navbar openModal={setOpenModal} openLogin={setOpenLogin} />
+      <Navbar user={user} openModal={setOpenModal} openLogin={setOpenLogin}/>
       <br />
 
+      {/* conditional rendering */}
       {openModal && <Modal closeModal={setOpenModal} />}
-      {openLogin && <LoginModal closeModal={setOpenLogin} />}
 
+      {openLogin && <LoginModal closeModal={setOpenLogin} openUserSetup={setOpenUserSetup} />}
+      {openUserSetup && <UserSetupModal user={user} closeModal={setOpenUserSetup} />}
+      
       {/* <h1>Create User</h1>
       <CreateUser />
       <br /> */}
