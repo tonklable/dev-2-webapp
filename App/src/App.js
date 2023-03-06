@@ -194,6 +194,7 @@ function App() {
 
       {/* conditional rendering */}
       {openModal && <Modal closeModal={setOpenModal} />}
+
       {openLogin && <LoginModal closeModal={setOpenLogin} openUserSetup={setOpenUserSetup} />}
       {openUserSetup && <UserSetupModal user={user} closeModal={setOpenUserSetup} />}
       
