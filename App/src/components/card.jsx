@@ -17,9 +17,9 @@ export const CardSection = (props) => {
         <>
 
             <div class="grid grid-cols-6 px-8 py-4 gap-4 h-full cursor-pointer " >
-                
+
                 {cards.map((card) =>
-                    <div key={card.id} class="relative col-span-6 lg:col-span-2 sm:col-span-3 h-64 bg-white drop-shadow-md rounded-lg font-poppins"  onClick={()=>{props.setOpenFullpage(true); props.setPageID(card.id);}} >
+                    <div key={card.id} class="relative col-span-6 lg:col-span-2 sm:col-span-3 h-64 bg-white drop-shadow-md rounded-lg font-poppins" onClick={() => { props.setOpenFullpage(true); props.setPageID(card.id); }} >
                         <div class="">
                             <img src="https://static.onecms.io/wp-content/uploads/sites/43/2022/05/26/45921-crispy-and-creamy-doughnuts-ddmfs-638-3x4-1.jpg" alt="event pics" class="absolute object-cover w-28 h-28 right-3 top-9 rounded-lg" />
                             <div class="absolute right-3 top-2" onClick={() => alert('clicked!')}>
