@@ -153,12 +153,16 @@ function App() {
 
   // track user status
   const [user, setUser] = useState(null);
+  const [userid, setUserID] = useState(null);
+  console.log("user id:"+userid);
+
   useEffect(() => {
     const auth = getAuth();
 
     onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
+        setUserID(currentUser.uid);
         // // Check if this is a new user by checking creation time and last sign in time
         // if (currentUser.metadata.creationTime === currentUser.metadata.lastSignInTime) {
         //   // This is a new user, so redirect them to the modal component for filling out their display name and username
@@ -178,6 +182,9 @@ function App() {
         });
         
       }
+      else {
+        setUserID(null);
+      }
     })
   }, []);
 
@@ -189,7 +196,10 @@ function App() {
       {/* <h1>Create Event</h1>
       <CreateEvent />
       <h2>Event List</h2> */}
-      <Navbar user={user} openModal={setOpenModal} openLogin={setOpenLogin}/>
+
+      {/* <Navbar user={user} openModal={setOpenModal} openLogin={setOpenLogin}/> */}
+      <Navbar userid={userid} openModal={setOpenModal} openLogin={setOpenLogin}/>
+
       <br />
 
       {/* conditional rendering */}
