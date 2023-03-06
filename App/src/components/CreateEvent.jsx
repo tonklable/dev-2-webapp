@@ -153,7 +153,7 @@ function Modal({ closeModal }) {
                                 </div>
                                 <div>
                                     <label for="Event Note" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Note</label>
-                                    <textarea type="Event Note" name="Event Location" id="Event Location" class="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full md:h-auto p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="Write your note here..." value={eventNote} onChange={(e) => setEventNote(e.target.value)} required></textarea>
+                                    <textarea type="Event Note" name="Event Location" id="Event Location" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full md:h-auto p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="Write your note here..." value={eventNote} onChange={(e) => setEventNote(e.target.value)}></textarea>
                                 </div>
                                 <button type="submit" class="w-full text-white bg-[#ff6565] hover:bg-[#E44444] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add Event</button>
 
