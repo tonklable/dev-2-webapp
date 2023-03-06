@@ -1,9 +1,11 @@
 import React from "react";
 import Datepicker from "tailwind-datepicker-react"
 import { useState, useEffect } from 'react';
-import { db } from "../Firebase";
+import { db, database } from "../Firebase";
 import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe } from "firebase/database";
 import TimePicker from 'react-time-picker';
+import { doc, addDoc, collection } from "firebase/firestore";
+
 
 // Calendar
 const options = {
@@ -67,8 +69,9 @@ function Modal({ closeModal }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const query = ref(db, "Events/" + Date.now());
-        set(query, {
+        const eventsRef = collection(database, "events");
+        console.log(eventsRef)
+        await addDoc(eventsRef, {
             name: eventName,
             location: eventLocation,
             date: eventDate,
@@ -79,6 +82,20 @@ function Modal({ closeModal }) {
             cost: eventCost,
             note: eventNote,
         });
+
+
+        // const query = ref(db, "Events/" + Date.now());
+        // set(query, {
+        //     name: eventName,
+        //     location: eventLocation,
+        //     date: eventDate,
+        //     time: eventTime,
+        //     tag: eventTag,
+        //     capacity: eventCapacity,
+        //     food: eventFood,
+        //     cost: eventCost,
+        //     note: eventNote,
+        // });
         setEventName('');
         setEventLocation('');
         setEventDate('');

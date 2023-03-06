@@ -2,13 +2,15 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/navbar';
 import { CardSection } from './components/card';
-import { db } from "./Firebase";
-import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe, child, get} from "firebase/database";
+import { db, database } from "./Firebase";
+import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe, child, get } from "firebase/database";
 import Modal from "./components/CreateEvent";
 import FullPage from "./components/FullPage";
 import LoginModal from "./components/Login";
 import UserSetupModal from './components/UserSetup';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { addDoc, collection, getDoc, onSnapshot, doc } from "firebase/firestore";
+
 
 function JoinEvent(props) {
   const [attendeeName, setAttendeeName] = useState('');
@@ -69,42 +71,94 @@ function JoinEvent(props) {
 
 function EventList(props) {
   const [events, setEvents] = useState([]);
-  const [openFullpage, setOpenFullpage] = useState(false)
-  const [pageID, setPageID] = useState()
+  const [openFullpage, setOpenFullpage] = useState(false);
+  const [pageID, setPageID] = useState();
+
   const fetchEvents = async () => {
-    const query = ref(db, "Events");
-    return onValue(query, (snapshot) => {
-      const data = snapshot.val();
-      setEvents([]);
-      if (snapshot.exists()) {
-        Object.entries(data).forEach((event) => {
-          const attendeeID = event[1].attendees;
-          if (attendeeID != undefined) {
-            const attendeeQuery = ref(db, "Members");
-            onValue(attendeeQuery, (snapshot) => {
-              if (snapshot.exists()) {
-                const attendees = snapshot.val();
-                const attendeeNames = attendeeID.map(id => attendees[id].name);
+    setEvents([]);
+    const eventsTempt = [];
+    // console.log('test database')
+    // console.log(events)
+    const eventsCollection = collection(database, "events");
+    // const querySnapshot = await getDocs(eventsCollection);
+    onSnapshot(eventsCollection, (querySnapshot) => {
 
-                setEvents((events) => [...events, { id: event[0], name: event[1].name, location: event[1].location, date: event[1].date, capacity:event[1].capacity, food:event[1].food,cost:event[1].cost,tag:event[1].tag,note:event[1].note,time:event[1].time, attendees: attendeeNames }]);
+      querySnapshot.forEach((document) => {
+        const event = document.data();
+        const attendeeIDs = event.attendees;
+        const attendees = [];
+        const attendeesPromises = [];
 
 
-              }
-            }
-            )
-          }
-          else {
-            setEvents((events) => [...events, { id: event[0], name: event[1].name, location: event[1].location, capacity:event[1].capacity, date: event[1].date,food:event[1].food,cost:event[1].cost,time:event[1].time,tag:event[1].tag,note:event[1].note,attendees: [] }]);
+        if (Array.isArray(attendeeIDs)) {
+          // console.log(attendeeIDs)
+          attendeeIDs.forEach(async (id) => {
+            // console.log(id)
+            const attendeeDoc = doc(database, "users", id)
+            const attendeeSnapshot = await getDoc(attendeeDoc);
+            // console.log(attendeeSnapshot.data().name);
+            attendees.push(attendeeSnapshot.data().name);
+            // console.log(attendees)
+          });
+        }
 
-          }
-
-
-
-
-
+        eventsTempt.push({
+          id: doc.id,
+          name: event.name,
+          location: event.location,
+          date: event.date,
+          capacity: event.capacity,
+          food: event.food,
+          cost: event.cost,
+          tag: event.tag,
+          note: event.note,
+          time: event.time,
+          attendees: attendees,
         });
-      }
-    });
+      });
+      setEvents(eventsTempt);
+
+      console.log(events)
+
+    })
+
+
+
+    // const query = ref(db, "Events");
+    // return onValue(query, (snapshot) => {
+    //   const data = snapshot.val();
+    //   setEvents([]);
+    //   if (snapshot.exists()) {
+    //     Object.entries(data).forEach((event) => {
+    //       const attendeeID = event[1].attendees;
+    //       if (attendeeID != undefined) {
+    //         const attendeeQuery = ref(db, "Members");
+    //         onValue(attendeeQuery, (snapshot) => {
+    //           if (snapshot.exists()) {
+    //             const attendees = snapshot.val();
+    //             const attendeeNames = attendeeID.map(id => attendees[id].name);
+
+    //             setEvents((events) => [...events, { id: event[0], name: event[1].name, location: event[1].location, date: event[1].date, capacity: event[1].capacity, food: event[1].food, cost: event[1].cost, tag: event[1].tag, note: event[1].note, time: event[1].time, attendees: attendeeNames }]);
+
+
+    //           }
+    //         }
+    //         )
+    //       }
+    //       else {
+    //         setEvents((events) => [...events, { id: event[0], name: event[1].name, location: event[1].location, capacity: event[1].capacity, date: event[1].date, food: event[1].food, cost: event[1].cost, time: event[1].time, tag: event[1].tag, note: event[1].note, attendees: [] }]);
+
+    //       }
+
+
+
+
+
+    //     });
+    //   }
+    // });
+
+
   }
 
 
@@ -118,10 +172,10 @@ function EventList(props) {
 
   return (
     <div>
-      {openFullpage && <FullPage closeFP={setOpenFullpage}  events={events} pageID={pageID} />}
+      {openFullpage && <FullPage closeFP={setOpenFullpage} events={events} pageID={pageID} />}
 
 
-      <CardSection events={events} setOpenFullpage={setOpenFullpage} setPageID={setPageID}/>
+      <CardSection events={events} setOpenFullpage={setOpenFullpage} setPageID={setPageID} />
       {events.map((event) => (
         <div key={event.id}>
           <h3>{event.name}</h3>
@@ -176,7 +230,7 @@ function App() {
         }, (error) => {
           console.error(error);
         });
-        
+
       }
     })
   }, []);
@@ -184,12 +238,12 @@ function App() {
   return (
     <div>
       {/* <button className="openFP" onClick={()=>{setOpenFullpage(true);}}> OpenFP </button> */}
-      
+
 
       {/* <h1>Create Event</h1>
       <CreateEvent />
       <h2>Event List</h2> */}
-      <Navbar user={user} openModal={setOpenModal} openLogin={setOpenLogin}/>
+      <Navbar user={user} openModal={setOpenModal} openLogin={setOpenLogin} />
       <br />
 
       {/* conditional rendering */}
@@ -197,7 +251,7 @@ function App() {
 
       {openLogin && <LoginModal closeModal={setOpenLogin} openUserSetup={setOpenUserSetup} />}
       {openUserSetup && <UserSetupModal user={user} closeModal={setOpenUserSetup} />}
-      
+
       {/* <h1>Create User</h1>
       <CreateUser />
       <br /> */}
