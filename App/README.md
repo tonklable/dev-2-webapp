@@ -2,6 +2,12 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Setting up environment
+
+We have set new Firebase config environment.
+
+You have to duplicate `.env.sample` file and rename it to `.env` before `npm start`. (You have to restart `npm start` if you forgot to do this.)
+
 ## Available Scripts
 
 In the project directory, you can run:
