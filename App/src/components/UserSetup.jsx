@@ -1,7 +1,8 @@
 import React from "react";
 import { useState, useEffect } from 'react';
-import { db } from "../Firebase";
-import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe } from "firebase/database";
+import { db, database } from "../Firebase";
+// import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe } from "firebase/database";
+import { doc, setDoc } from "firebase/firestore";
 
 function UserSetupModal({ user, closeModal }) {
     const [userName, setUserName] = useState('');
@@ -9,11 +10,11 @@ function UserSetupModal({ user, closeModal }) {
   
     const handleSubmit = async (e) => {
       e.preventDefault();
-      const query = ref(db, "Members/" + user.uid);
-      set(query, {
-        name: userName,
+      const userDocRef = doc(database, 'users', user.uid);
+      setDoc(userDocRef, {
         email: userEmail,
-      });
+        name: userName,
+      })
       setUserName('');
       setUserEmail('');
       closeModal(false);
