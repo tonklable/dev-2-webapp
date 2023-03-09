@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Filter } from '../assets/icons'
-import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
-import { db } from "../Firebase";
-import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe, child, get} from "firebase/database";
+import { getAuth, signOut} from "firebase/auth";
+import { database } from "../Firebase";
+// import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe } from "firebase/database";
+import { collection, getDoc, doc} from "firebase/firestore";
 
-// const Navbar = ({ user, openModal, openLogin }) => {
-function Navbar ({ user, openModal, openLogin }) {
+function Navbar ({ userid, openModal, openLogin }) {
     const auth = getAuth();
 
     const handleSignOut = () => {
@@ -17,23 +17,23 @@ function Navbar ({ user, openModal, openLogin }) {
                 console.error(error);
             });
     }
-
-    // retrieve username value from db based on uid
-    const usersRef = ref(db, 'Members');
+    
+    // retrieve username value from firestore based on uid
     const [username, setUsername] = useState("");
-    const userRef = user && user.uid ? child(usersRef, user.uid) : null;
+    const usersRef = collection(database, 'users');
+    const userRef = userid ? doc(usersRef, userid) : null;
 
     useEffect(() => {
         if (userRef) {
-          get(userRef).then((snapshot) => {
-            if (snapshot.exists()) {
-              setUsername(snapshot.val().name);
+          getDoc(userRef).then((doc) => {
+            if (doc.exists()) {
+              setUsername(doc.data().name);
             }
           }, (error) => {
             console.error(error);
           });
         }
-      }, [usersRef, user]);
+      }, [usersRef, userid]);
     
     return (
         <>
@@ -44,7 +44,7 @@ function Navbar ({ user, openModal, openLogin }) {
 
                         <div class="items-center col-span-1"><h1 class='ml-3 text-3xl text-white font-poppins font-bold'>TyTime</h1></div>
                         <div class="flex justify-end items-center h-full mr-3 col-start-10 col-span-3 sm:col-start-11 sm:col-span-2">
-                            {user ?
+                            {userid ?
                                 <span class="text-right mr-3">
                                     <p class="font-semibold">Welcome, {username}!</p>
                                     <button class="bg-transparent hover:underline text-white" onClick={handleSignOut}>sign out</button>
