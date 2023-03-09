@@ -198,6 +198,7 @@ function EventList(props) {
 };
 
 function App() {
+
   const [openModal, setOpenModal] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
   const [openUserSetup, setOpenUserSetup] = useState(false);
