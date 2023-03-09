@@ -206,32 +206,31 @@ function App() {
   console.log(openModal)
   console.log(openLogin)
 
-  // track user status
+  // Users
   const [user, setUser] = useState(null);
+  const [userid, setUserID] = useState(null);
   useEffect(() => {
     const auth = getAuth();
 
+    // Track user status
     onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
-        // // Check if this is a new user by checking creation time and last sign in time
-        // if (currentUser.metadata.creationTime === currentUser.metadata.lastSignInTime) {
-        //   // This is a new user, so redirect them to the modal component for filling out their display name and username
-        //   // history.push('/modal');
-        //   setOpenUserSetup(true);
-        // }
+        setUserID(currentUser.uid);
 
-        // Check if a new user by checking the uid existence in our db
-        const usersRef = ref(db, 'Members');
-        const userRef = child(usersRef, currentUser.uid);
-        get(userRef).then((snapshot) => {
-          if (!snapshot.exists()) {
+        // Check if a new user by checking the uid existence in our Firestore db
+        const usersRef = collection(database, 'users');
+        const userRef = doc(usersRef, currentUser.uid);
+        getDoc(userRef).then((doc) => {
+          if (!doc.exists()) {
             setOpenUserSetup(true);
           }
-        }, (error) => {
+        }).catch((error) => {
           console.error(error);
         });
-
+      } else {
+        // if no current user
+        setUserID(null);
       }
     })
   }, []);
@@ -244,7 +243,8 @@ function App() {
       {/* <h1>Create Event</h1>
       <CreateEvent />
       <h2>Event List</h2> */}
-      <Navbar user={user} openModal={setOpenModal} openLogin={setOpenLogin} />
+      {/* <Navbar user={user} openModal={setOpenModal} openLogin={setOpenLogin} /> */}
+      <Navbar userid={userid} openModal={setOpenModal} openLogin={setOpenLogin} />
       <br />
 
       {/* conditional rendering */}
