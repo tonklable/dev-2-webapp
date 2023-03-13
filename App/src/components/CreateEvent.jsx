@@ -93,6 +93,7 @@ function Modal({ closeModal, userid }) {
         setEventFood('')
         setEventCost('')
         setEventNote('')
+        window.location.reload()
     };
 
     return (
