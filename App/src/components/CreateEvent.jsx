@@ -37,20 +37,20 @@ const options = {
 }
 
 // Real Modal
-function Modal({ closeModal }) {
+function Modal({ closeModal, userid }) {
     const [show, setShow] = useState(false)
     const [selectedDate, setSelectedDate] = useState();
     const [eventName, setEventName] = useState('');
     const [eventLocation, setEventLocation] = useState('');
     const [eventDate, setEventDate] = useState();
     const [eventTime, setEventTime] = useState();
-    const [eventOwner, setEventOwner] = useState();
     const [eventCapacity, setEventCapacity] = useState('');
     const [eventFood, setEventFood] = useState('');
     const [eventCost, setEventCost] = useState('');
     const [eventNote, setEventNote] = useState('');
     const [eventStatus, setEventStatus] = useState(true);
     const [eventTag, setEventTag] = useState('');
+
 
     const handleChange = (selectedDate) => {
         // setEventDate(selectedDate)
@@ -70,7 +70,7 @@ function Modal({ closeModal }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const eventsRef = collection(database, "events");
-        console.log(eventsRef)
+        console.log(userid)
         await addDoc(eventsRef, {
             name: eventName,
             location: eventLocation,
@@ -81,21 +81,9 @@ function Modal({ closeModal }) {
             food: eventFood,
             cost: eventCost,
             note: eventNote,
+            ownerid: userid
         });
 
-
-        // const query = ref(db, "Events/" + Date.now());
-        // set(query, {
-        //     name: eventName,
-        //     location: eventLocation,
-        //     date: eventDate,
-        //     time: eventTime,
-        //     tag: eventTag,
-        //     capacity: eventCapacity,
-        //     food: eventFood,
-        //     cost: eventCost,
-        //     note: eventNote,
-        // });
         setEventName('');
         setEventLocation('');
         setEventDate('');
@@ -105,6 +93,7 @@ function Modal({ closeModal }) {
         setEventFood('')
         setEventCost('')
         setEventNote('')
+        window.location.reload()
     };
 
     return (
