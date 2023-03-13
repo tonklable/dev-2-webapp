@@ -83,19 +83,6 @@ function Modal({ closeModal }) {
             note: eventNote,
         });
 
-
-        // const query = ref(db, "Events/" + Date.now());
-        // set(query, {
-        //     name: eventName,
-        //     location: eventLocation,
-        //     date: eventDate,
-        //     time: eventTime,
-        //     tag: eventTag,
-        //     capacity: eventCapacity,
-        //     food: eventFood,
-        //     cost: eventCost,
-        //     note: eventNote,
-        // });
         setEventName('');
         setEventLocation('');
         setEventDate('');

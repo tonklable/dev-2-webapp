@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Filter } from '../assets/icons'
-import { getAuth, signOut} from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 import { database } from "../Firebase";
 // import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe } from "firebase/database";
-import { collection, getDoc, doc} from "firebase/firestore";
+import { collection, getDoc, doc } from "firebase/firestore";
 
-function Navbar ({ userid, openModal, openLogin }) {
+function Navbar({ userid, openModal, openLogin }) {
     const auth = getAuth();
 
     const handleSignOut = () => {
@@ -17,7 +17,7 @@ function Navbar ({ userid, openModal, openLogin }) {
                 console.error(error);
             });
     }
-    
+
     // retrieve username value from firestore based on uid
     const [username, setUsername] = useState("");
     const usersRef = collection(database, 'users');
@@ -25,16 +25,16 @@ function Navbar ({ userid, openModal, openLogin }) {
 
     useEffect(() => {
         if (userRef) {
-          getDoc(userRef).then((doc) => {
-            if (doc.exists()) {
-              setUsername(doc.data().name);
-            }
-          }, (error) => {
-            console.error(error);
-          });
+            getDoc(userRef).then((doc) => {
+                if (doc.exists()) {
+                    setUsername(doc.data().name);
+                }
+            }, (error) => {
+                console.error(error);
+            });
         }
-      }, [usersRef, userid]);
-    
+    }, [usersRef, userid]);
+
     return (
         <>
             <div class="h-[75px] bg-[#f1c470] drop-shadow-lg">
@@ -53,7 +53,7 @@ function Navbar ({ userid, openModal, openLogin }) {
                                 //         onClick={handleSignOut}>Sign Out</button>
                                 :
                                 <button class="bg-transparent hover:bg-white text-white font-semibold hover:text-[#ff6565] py-2 px-4 border border-white rounded-full"
-                                        onClick={() => { openLogin(true) }}>Sign In</button>
+                                    onClick={() => { openLogin(true) }}>Sign In</button>
                             }
                         </div>
                     </div>
@@ -82,7 +82,7 @@ function Navbar ({ userid, openModal, openLogin }) {
                         <button type="submit" class="text-black w-full mx-1 p-2.5 px-1 pr-3 font-semibold text-sm">Status</button>
                     </div>
                 </div>
-                <button type="submit" class="flex items-center justify-center bg-[#ff6565] hover hover:bg-[#E44444] rounded-full my-3 drop-shadow col-span-3 sm:col-span-1 text-white font-semibold text-sm" onClick={() => { openModal(true) }}>Add Event</button>
+                <button type="submit" class="flex items-center justify-center bg-[#ff6565] hover hover:bg-[#E44444] rounded-full my-3 drop-shadow col-span-3 sm:col-span-1 text-white font-semibold text-sm" onClick={() => { userid ? openModal(true) : openLogin(true) }}>Add Event</button>
             </div>
         </>
     );
