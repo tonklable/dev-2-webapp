@@ -38,7 +38,7 @@ function FullPage(props) {
                                 </div>
                                 <div class="">
                                     <button class=" px-3 py-2 text-xl text-blue-100 bg-blue-600 rounded">Join</button>
-                                    {props.userid==event.ownerid && <button class=" px-3 py-2 text-xl text-blue-100 bg-red-600 rounded" onClick={() => {props.setDeleteEvent(true); props.closeFP(false)}}>Delete</button>}
+                                    {props.userid == event.ownerid && <button class=" px-3 py-2 text-xl text-blue-100 bg-red-600 rounded" onClick={() => { props.setDeleteEvent(true); props.closeFP(false) }}>Delete</button>}
                                 </div>
 
 
@@ -47,9 +47,9 @@ function FullPage(props) {
                         </div>
                     </div>
                     <div class="h-full flex flex-col">
-                       
-                    
-                         
+
+
+
                     </div>
 
 
