@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './components/navbar';
 import { CardSection } from './components/card';
 import { db, database } from "./Firebase";
-import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe, child, get } from "firebase/database";
+import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe, remove, child, get } from "firebase/database";
 import Modal from "./components/CreateEvent";
 import FullPage from "./components/FullPage";
 import LoginModal from "./components/Login";
@@ -11,6 +11,48 @@ import UserSetupModal from './components/UserSetup';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { addDoc, collection, getDoc, onSnapshot, doc } from "firebase/firestore";
 
+import DeleteEvent from './components/DeleteEvent';
+
+// function CreateUser(props) {
+//   const [userName, setUserName] = useState('');
+//   const [userEmail, setUserEmail] = useState('');
+
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     const query = ref(db, "Members/" + Date.now());
+//     set(query, {
+//       name: userName,
+//       email: userEmail,
+//     });
+//     setUserName('');
+//     setUserEmail('');
+//   };
+//   return (
+//     <form onSubmit={handleSubmit} key="CreateUser">
+//       <label>
+//         User name:
+//         <input
+//           type="text"
+//           value={userName}
+//           onChange={(e) => setUserName(e.target.value)}
+//         />
+//       </label>
+//       <br />
+//       <label>
+//         User email:
+//         <input
+//           type="text"
+//           value={userEmail}
+//           onChange={(e) => setUserEmail(e.target.value)}
+//         />
+//       </label>
+//       <br />
+//       <button type="text">Create user</button>
+//     </form>
+//   )
+
+// }
 
 function JoinEvent(props) {
   const [attendeeName, setAttendeeName] = useState('');
@@ -71,9 +113,9 @@ function JoinEvent(props) {
 
 function EventList(props) {
   const [events, setEvents] = useState([]);
-  const [openFullpage, setOpenFullpage] = useState(false);
-  const [pageID, setPageID] = useState();
-
+  const [openFullpage, setOpenFullpage] = useState(false)
+  const [openDeleteEvent, setDeleteEvent] = useState(false)
+  const [pageID, setPageID] = useState()
   const fetchEvents = async () => {
     setEvents([]);
     const eventsTempt = [];
@@ -103,7 +145,8 @@ function EventList(props) {
         }
 
         eventsTempt.push({
-          id: doc.id,
+          id: document.id,
+          ownerid: event.ownerid,
           name: event.name,
           location: event.location,
           date: event.date,
@@ -172,7 +215,9 @@ function EventList(props) {
 
   return (
     <div>
-      {openFullpage && <FullPage closeFP={setOpenFullpage} events={events} pageID={pageID} />}
+      {openFullpage && <FullPage closeFP={setOpenFullpage} setDeleteEvent={setDeleteEvent}  events={events} pageID={pageID} userid={props.userid}/>}
+      {openDeleteEvent && <DeleteEvent setOpenFullpage={setOpenFullpage} closeDeleteEvent={setDeleteEvent} events={events} pageID={pageID} /> }  
+      
 
 
       <CardSection events={events} setOpenFullpage={setOpenFullpage} setPageID={setPageID} />
@@ -257,7 +302,7 @@ function App() {
       <CreateUser />
       <br /> */}
 
-      <EventList />
+      <EventList userid={userid} />
       {/* {projects.map((project) => (
         <div>
           <p>{project.name}</p>
