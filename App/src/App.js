@@ -198,29 +198,12 @@ function EventList(props) {
 
   return (
     <div>
-      {openFullpage && <FullPage closeFP={setOpenFullpage} setDeleteEvent={setDeleteEvent} events={events} pageID={pageID} userid={props.userid} />}
+      {openFullpage && <FullPage closeFP={setOpenFullpage} setDeleteEvent={setDeleteEvent} events={events} pageID={pageID} userid={props.userid} openLogin={props.setOpenLogin} />}
       {openDeleteEvent && <DeleteEvent setOpenFullpage={setOpenFullpage} closeDeleteEvent={setDeleteEvent} events={events} pageID={pageID} />}
 
 
 
       <CardSection events={events} setOpenFullpage={setOpenFullpage} setPageID={setPageID} />
-      {events.map((event) => (
-        <div key={event.id}>
-          <h3>{event.name}</h3>
-          <p>{event.location}</p>
-          <p>{event.date}</p>
-          <h4>Attendee</h4>
-          <ul>
-            {
-              event.attendees.map((attendee) => (
-                <li key={attendee}>{attendee}</li>
-              ))
-            }
-          </ul>
-          <JoinEvent id={event.id} updateEventList={updateEventList} />
-          <br />
-        </div>
-      ))}
     </div>
   )
 };
@@ -285,7 +268,7 @@ function App() {
       <CreateUser />
       <br /> */}
 
-      <EventList userid={userid} />
+      <EventList userid={userid} setOpenLogin={setOpenLogin} />
       {/* {projects.map((project) => (
         <div>
           <p>{project.name}</p>
