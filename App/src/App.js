@@ -123,24 +123,42 @@ function EventList(props) {
     // console.log(events)
     const eventsCollection = collection(database, "events");
     // const querySnapshot = await getDocs(eventsCollection);
-    onSnapshot(eventsCollection, (querySnapshot) => {
-
-      querySnapshot.forEach((document) => {
+    onSnapshot(eventsCollection, async (querySnapshot) => {
+      const processDocument = async (document) => {
         const event = document.data();
         const attendeeIDs = event.attendees;
         const attendees = [];
-        const attendeesPromises = [];
-
 
         if (Array.isArray(attendeeIDs)) {
-          // console.log(attendeeIDs)
-          attendeeIDs.forEach(async (id) => {
-            // console.log(id)
-            const attendeeDoc = doc(database, "users", id)
-            const attendeeSnapshot = await getDoc(attendeeDoc);
-            // console.log(attendeeSnapshot.data().name);
-            attendees.push(attendeeSnapshot.data().name);
-            // console.log(attendees)
+          const attendeePromises = attendeeIDs.map(async (id) => {
+            console.log('ID:', id);
+            const usersCollection = collection(database, 'users');
+            const userDocRef = doc(usersCollection, id);
+            return new Promise((resolve) => {
+              onSnapshot(userDocRef, (doc) => {
+                if (doc.exists) {
+                  const user = doc.data();
+                  console.log('User data:', user);
+
+                  if (user && user.name) {
+                    const name = user.name;
+                    console.log('Name:', name);
+                    resolve(name);
+                  } else {
+                    resolve(null);
+                  }
+                } else {
+                  resolve(null);
+                }
+              });
+            });
+          });
+
+          const attendeeNames = await Promise.all(attendeePromises);
+          attendeeNames.forEach((name) => {
+            if (name) {
+              attendees.push(name);
+            }
           });
         }
 
@@ -158,48 +176,13 @@ function EventList(props) {
           time: event.time,
           attendees: attendees,
         });
-      });
+      };
+
+      const documentPromises = querySnapshot.docs.map(processDocument);
+      await Promise.all(documentPromises);
       setEvents(eventsTempt);
-
-      console.log(events)
-
+      console.log(events);
     })
-
-
-
-    // const query = ref(db, "Events");
-    // return onValue(query, (snapshot) => {
-    //   const data = snapshot.val();
-    //   setEvents([]);
-    //   if (snapshot.exists()) {
-    //     Object.entries(data).forEach((event) => {
-    //       const attendeeID = event[1].attendees;
-    //       if (attendeeID != undefined) {
-    //         const attendeeQuery = ref(db, "Members");
-    //         onValue(attendeeQuery, (snapshot) => {
-    //           if (snapshot.exists()) {
-    //             const attendees = snapshot.val();
-    //             const attendeeNames = attendeeID.map(id => attendees[id].name);
-
-    //             setEvents((events) => [...events, { id: event[0], name: event[1].name, location: event[1].location, date: event[1].date, capacity: event[1].capacity, food: event[1].food, cost: event[1].cost, tag: event[1].tag, note: event[1].note, time: event[1].time, attendees: attendeeNames }]);
-
-
-    //           }
-    //         }
-    //         )
-    //       }
-    //       else {
-    //         setEvents((events) => [...events, { id: event[0], name: event[1].name, location: event[1].location, capacity: event[1].capacity, date: event[1].date, food: event[1].food, cost: event[1].cost, time: event[1].time, tag: event[1].tag, note: event[1].note, attendees: [] }]);
-
-    //       }
-
-
-
-
-
-    //     });
-    //   }
-    // });
 
 
   }
@@ -215,29 +198,12 @@ function EventList(props) {
 
   return (
     <div>
-      {openFullpage && <FullPage closeFP={setOpenFullpage} setDeleteEvent={setDeleteEvent}  events={events} pageID={pageID} userid={props.userid}/>}
-      {openDeleteEvent && <DeleteEvent setOpenFullpage={setOpenFullpage} closeDeleteEvent={setDeleteEvent} events={events} pageID={pageID} /> }  
-      
+      {openFullpage && <FullPage closeFP={setOpenFullpage} setDeleteEvent={setDeleteEvent} events={events} pageID={pageID} userid={props.userid} openLogin={props.setOpenLogin} />}
+      {openDeleteEvent && <DeleteEvent setOpenFullpage={setOpenFullpage} closeDeleteEvent={setDeleteEvent} events={events} pageID={pageID} />}
+
 
 
       <CardSection events={events} setOpenFullpage={setOpenFullpage} setPageID={setPageID} />
-      {events.map((event) => (
-        <div key={event.id}>
-          <h3>{event.name}</h3>
-          <p>{event.location}</p>
-          <p>{event.date}</p>
-          <h4>Attendee</h4>
-          <ul>
-            {
-              event.attendees.map((attendee) => (
-                <li key={attendee}>{attendee}</li>
-              ))
-            }
-          </ul>
-          <JoinEvent id={event.id} updateEventList={updateEventList} />
-          <br />
-        </div>
-      ))}
     </div>
   )
 };
@@ -289,7 +255,7 @@ function App() {
       <CreateEvent />
       <h2>Event List</h2> */}
       {/* <Navbar user={user} openModal={setOpenModal} openLogin={setOpenLogin} /> */}
-      <Navbar userid={userid} openModal={setOpenModal} openLogin={setOpenLogin} />
+      <Navbar userid={userid} user={user} openModal={setOpenModal} openLogin={setOpenLogin} />
       <br />
 
       {/* conditional rendering */}
@@ -302,7 +268,7 @@ function App() {
       <CreateUser />
       <br /> */}
 
-      <EventList userid={userid} />
+      <EventList userid={userid} setOpenLogin={setOpenLogin} />
       {/* {projects.map((project) => (
         <div>
           <p>{project.name}</p>
