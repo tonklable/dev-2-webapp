@@ -5,10 +5,11 @@ import { database } from "../Firebase";
 
 function FullPage(props) {
     const event = props.events.find(event => event.id === props.pageID)
+
+    /* Fetch current user information (username) */
     const [username, setUsername] = useState("");
     const usersRef = collection(database, 'users');
     const userRef = props.userid ? doc(usersRef, props.userid) : null;
-
 
     useEffect(() => {
         if (userRef) {
@@ -22,6 +23,7 @@ function FullPage(props) {
         }
     }, [usersRef, props.userid]);
 
+    /* Join-Unjoin */
     const join = event.attendees.includes(username);
 
     console.log(event.attendees.includes(username))
@@ -52,6 +54,23 @@ function FullPage(props) {
         window.location.reload()
     }
 
+    /* Party owner's name */
+    const ownerRef = doc(database, 'users', event.ownerid);
+    const [ownername, setPartyOwner] = useState("");
+    useEffect(() => {
+        if (ownerRef) {
+            getDoc(ownerRef).then((doc) => {
+                if (doc.exists()) {
+                    setPartyOwner(doc.data().name);
+                } 
+            }, (error) => {
+                console.error(error);
+            });
+        }
+    });
+
+    
+
     return (
         <div>
             <div class="fixed top-0 left-0 right-0 bottom-0 z-40 bg-black opacity-75"></div>
@@ -72,7 +91,7 @@ function FullPage(props) {
                                 <img src="https://static.onecms.io/wp-content/uploads/sites/43/2022/05/26/45921-crispy-and-creamy-doughnuts-ddmfs-638-3x4-1.jpg" alt="event pics" class="object-cover object-center h-full w-full " />
                                 <div class="grid grid-cols-2 gap-3">
                                     <h1 class="text-left text-xl font-bold text-gray-900 dark:text-white">Party Owner: <br /> Party Date: <br /> Party Time: <br /> Tag: <br /> Location: <br />Food: <br /> Cost:  <br />Capacity:</h1>
-                                    <h1 class="text-left text-xl font-bold text-gray-900 dark:text-white">{event.ownerid}<br /> {event.date} <br /> {event.time} <br /> {event.tag} <br /> {event.location} <br /> {event.food} <br /> {event.cost} <br /> {event.capacity}  </h1>
+                                    <h1 class="text-left text-xl font-bold text-gray-900 dark:text-white">{ownername}<br /> {event.date} <br /> {event.time} <br /> {event.tag} <br /> {event.location} <br /> {event.food} <br /> {event.cost} <br /> {event.capacity}  </h1>
 
                                 </div>
                             </div>
