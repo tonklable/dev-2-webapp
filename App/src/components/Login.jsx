@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from 'react';
 import { db } from "../Firebase";
 import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe } from "firebase/database";
-import { 
+import {
     getAuth,
     signOut,
     GoogleAuthProvider, signInWithRedirect
@@ -13,7 +13,7 @@ function LoginModal({ closeModal, openUserSetup }) {
 
     // Get the default authentication instance for the default Firebase app
     const auth = getAuth();
-
+    // abc
     const handleGoogleSingIn = () => {
         const provider = new GoogleAuthProvider();
 
@@ -40,7 +40,7 @@ function LoginModal({ closeModal, openUserSetup }) {
                         </button>
                         <div class="px-6 py-12 lg:px-8">
                             <button type="submit" id="btnSignIn" class="w-full text-white bg-[#ff6565] hover:bg-[#E44444] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                    onClick={handleGoogleSingIn}>Sign in with Google</button>
+                                onClick={handleGoogleSingIn}>Sign in with Google</button>
                         </div>
                     </div>
                 </div>
