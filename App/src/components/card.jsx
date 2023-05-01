@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect }  from 'react';
 import { Share, Location, User, UserGroup, Calendar, Clock } from '../assets/icons'
-
+import { doc, getDoc, updateDoc, collection, arrayUnion, arrayRemove } from "firebase/firestore";
+import { database } from "../Firebase";
 
 var cards = [];
 for (var i = 1; i <= 12; i++) {
@@ -11,6 +12,24 @@ for (var i = 1; i <= 12; i++) {
 export const CardSection = (props) => {
     var cards = props.events
     console.log("test")
+
+    // /* Fetch party owner's name from given event card */
+    const GetOwnerName = (card) => {
+        const ownerRef = doc(database, 'users', card.ownerid);
+        const [ownername, setPartyOwner] = useState("");
+        useEffect(() => {
+            if (ownerRef) {
+                getDoc(ownerRef).then((doc) => {
+                    if (doc.exists()) {
+                        setPartyOwner(doc.data().name);
+                    } 
+                }, (error) => {
+                    console.error(error);
+                });
+            }
+        });
+        return ownername;
+    }
 
     console.log(cards)
     return (
@@ -33,7 +52,7 @@ export const CardSection = (props) => {
                                     <div class="absolute p-1 pl-0">
                                         <User />
                                     </div>
-                                    <p class="text-[12px] ml-6">Natprawee Pattayawij</p>
+                                    <p class="text-[12px] ml-6">{GetOwnerName(card)}</p>
                                 </div>
                                 <div class="flex items-center">
                                     <div class="absolute p-1 pl-0">
@@ -83,4 +102,3 @@ export const CardSection = (props) => {
         </>
     );
 }
-
