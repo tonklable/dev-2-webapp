@@ -1,17 +1,6 @@
 // import { initializeApp } from "firebase/app";
 // import { getDatabase } from "firebase/database";
 
-// const firebaseConfig = {
-//     apiKey: "AIzaSyBN-9PV5PEOdOxWOqOqmDuGSNcrPocqqK0",
-//     authDomain: "dev-2-webapp.firebaseapp.com",
-//     databaseURL: "https://dev-2-webapp-default-rtdb.asia-southeast1.firebasedatabase.app",
-//     projectId: "dev-2-webapp",
-//     storageBucket: "dev-2-webapp.appspot.com",
-//     messagingSenderId: "870530367064",
-//     appId: "1:870530367064:web:ba041a8b506387a112542d",
-//     measurementId: "G-9R8K7VFWW7"
-// };
-
 // const app = initializeApp(firebaseConfig);
 // export const db = getDatabase(app);s
 
