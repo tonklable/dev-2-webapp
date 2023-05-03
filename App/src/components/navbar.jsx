@@ -46,7 +46,7 @@ function Navbar({ userid, openModal, openLogin }) {
                         <div class="flex justify-end items-center h-full mr-3 col-start-10 col-span-3 sm:col-start-11 sm:col-span-2">
                             {userid ?
                                 <span class="text-right mr-3">
-                                    <p class="font-semibold">Welcome, {username}!</p>
+                                    <p class="font-semibold">Hello Welcome, {username}!</p>
                                     <button class="bg-transparent hover:underline text-white" onClick={handleSignOut}>sign out</button>
                                 </span>
                                 // <button class="bg-transparent hover:bg-white text-white font-semibold hover:text-[#ff6565] py-2 px-4 border border-white rounded-full"
