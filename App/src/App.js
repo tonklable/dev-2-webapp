@@ -10,9 +10,7 @@ import LoginModal from "./components/Login";
 import UserSetupModal from './components/UserSetup';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { addDoc, collection, getDoc, onSnapshot, doc } from "firebase/firestore";
-import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
-import "./App.css";
-
+import MapComponent from './components/MapComponent';
 import DeleteEvent from './components/DeleteEvent';
 
 // function CreateUser(props) {
@@ -210,16 +208,6 @@ function EventList(props) {
   )
 };
 
-function Map() {
-  const center = useMemo(() => ({ lat: 44, lng: -80 }), []);
-
-  return (
-    <GoogleMap zoom={10} center={center} mapContainerClassName='map-container'>
-      <Marker position={center} />
-    </GoogleMap>
-  );
-}
-
 function App() {
 
   const [openModal, setOpenModal] = useState(false);
@@ -258,13 +246,6 @@ function App() {
     })
   }, []);
 
-  /* Maps */
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-  });
-  const center = useMemo(() => ({ lat: 44, lng: -80 }), []);
-  // if (!isLoaded) return <div>Loading...</div>;
-  // return <Map />;
 
 
   return (
@@ -297,16 +278,7 @@ function App() {
         </div>
       ))} */}
 
-      Helllooo
-      {!isLoaded ? (
-        <h1>Map Loading...</h1>
-      ) : (
-        <GoogleMap zoom={10} center={center} mapContainerClassName="map-container">
-          <Marker position={center} />
-        </GoogleMap>
-      )}
-      {/* <Map /> */}
-      Helllooo
+      <MapComponent />
 
     </div>
   );
