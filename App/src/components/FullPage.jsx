@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Share, Location, User, UserGroup, Calendar, Clock } from '../assets/icons'
 import { doc, getDoc, updateDoc, collection, arrayUnion, arrayRemove } from "firebase/firestore";
 import { database } from "../Firebase";
+import MapComponent from "./MapComponent";
 
 function FullPage(props) {
     const event = props.events.find(event => event.id === props.pageID)
@@ -94,6 +95,7 @@ function FullPage(props) {
                                     <h1 class="text-left text-xl font-bold text-gray-900 dark:text-white">{ownername}<br /> {event.date} <br /> {event.time} <br /> {event.tag} <br /> {event.location} <br /> {event.food} <br /> {event.cost} <br /> {event.capacity}  </h1>
 
                                 </div>
+                                <MapComponent />
                             </div>
                             <div class="h-full flex flex-col">
                                 <div class="mb-2 h-full flex flex-col">
