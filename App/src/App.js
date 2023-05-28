@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Navbar from './components/navbar';
 import { CardSection } from './components/card';
 import { db, database } from "./Firebase";
@@ -10,6 +10,8 @@ import LoginModal from "./components/Login";
 import UserSetupModal from './components/UserSetup';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { addDoc, collection, getDoc, onSnapshot, doc } from "firebase/firestore";
+import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
+import "./App.css";
 
 import DeleteEvent from './components/DeleteEvent';
 
@@ -208,6 +210,16 @@ function EventList(props) {
   )
 };
 
+function Map() {
+  const center = useMemo(() => ({ lat: 44, lng: -80 }), []);
+
+  return (
+    <GoogleMap zoom={10} center={center} mapContainerClassName='map-container'>
+      <Marker position={center} />
+    </GoogleMap>
+  );
+}
+
 function App() {
 
   const [openModal, setOpenModal] = useState(false);
@@ -246,10 +258,18 @@ function App() {
     })
   }, []);
 
+  /* Maps */
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+  });
+  const center = useMemo(() => ({ lat: 44, lng: -80 }), []);
+  // if (!isLoaded) return <div>Loading...</div>;
+  // return <Map />;
+
+
   return (
     <div>
       {/* <button className="openFP" onClick={()=>{setOpenFullpage(true);}}> OpenFP </button> */}
-
 
       {/* <h1>Create Event</h1>
       <CreateEvent />
@@ -276,6 +296,17 @@ function App() {
           <p>{project.date}</p>
         </div>
       ))} */}
+
+      Helllooo
+      {!isLoaded ? (
+        <h1>Map Loading...</h1>
+      ) : (
+        <GoogleMap zoom={10} center={center} mapContainerClassName="map-container">
+          <Marker position={center} />
+        </GoogleMap>
+      )}
+      {/* <Map /> */}
+      Helllooo
 
     </div>
   );
