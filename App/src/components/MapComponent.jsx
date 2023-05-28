@@ -38,15 +38,15 @@ function MapComponent() {
             console.error(error);
         });
 
-    return () => {
-      // Clean up the loaded Google Maps API when the component is unmounted
-      loader.release();
-    };
+    // return () => {
+    //   // Clean up the loaded Google Maps API when the component is unmounted
+    //   loader.release();
+    // };
   }, []);
 
   return (
     <div>
-        <div id="map" style={{ width: '100%', height: '400px' }}></div>
+        <div id="map" style={{ width: '100%', height: '300px' }}></div>
         {!mapLoaded && <div>Loading map...</div>}
     </div>
   );

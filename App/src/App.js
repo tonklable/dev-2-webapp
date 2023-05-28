@@ -1,15 +1,15 @@
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect} from 'react';
 import Navbar from './components/navbar';
 import { CardSection } from './components/card';
 import { db, database } from "./Firebase";
-import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe, remove, child, get } from "firebase/database";
+import { onValue, ref, update } from "firebase/database";
 import Modal from "./components/CreateEvent";
 import FullPage from "./components/FullPage";
 import LoginModal from "./components/Login";
 import UserSetupModal from './components/UserSetup';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { addDoc, collection, getDoc, onSnapshot, doc } from "firebase/firestore";
+import { collection, getDoc, onSnapshot, doc } from "firebase/firestore";
 import MapComponent from './components/MapComponent';
 import DeleteEvent from './components/DeleteEvent';
 
@@ -53,6 +53,8 @@ import DeleteEvent from './components/DeleteEvent';
 //   )
 
 // }
+
+
 
 function JoinEvent(props) {
   const [attendeeName, setAttendeeName] = useState('');
