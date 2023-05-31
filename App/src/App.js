@@ -1,16 +1,16 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import Navbar from './components/navbar';
 import { CardSection } from './components/card';
 import { db, database } from "./Firebase";
-import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe, remove, child, get } from "firebase/database";
+import { onValue, ref, update } from "firebase/database";
 import Modal from "./components/CreateEvent";
 import FullPage from "./components/FullPage";
 import LoginModal from "./components/Login";
 import UserSetupModal from './components/UserSetup';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { addDoc, collection, getDoc, onSnapshot, doc } from "firebase/firestore";
-
+import { collection, getDoc, onSnapshot, doc } from "firebase/firestore";
+import MapComponent from './components/MapComponent';
 import DeleteEvent from './components/DeleteEvent';
 
 // function CreateUser(props) {
@@ -53,6 +53,8 @@ import DeleteEvent from './components/DeleteEvent';
 //   )
 
 // }
+
+
 
 function JoinEvent(props) {
   const [attendeeName, setAttendeeName] = useState('');
@@ -246,10 +248,11 @@ function App() {
     })
   }, []);
 
+
+
   return (
     <div>
       {/* <button className="openFP" onClick={()=>{setOpenFullpage(true);}}> OpenFP </button> */}
-
 
       {/* <h1>Create Event</h1>
       <CreateEvent />
@@ -276,6 +279,8 @@ function App() {
           <p>{project.date}</p>
         </div>
       ))} */}
+
+      <MapComponent />
 
     </div>
   );
