@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 
-// function MapComponent() {
-function MapComponent(props) {
+function LocSearchComponent(props) {
   const [mapLoaded, setMapLoaded] = useState(false);
 
   useEffect(() => {
@@ -44,8 +43,6 @@ function MapComponent(props) {
       autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace();
         console.log('Place ID:', place.place_id);
-        // You can save the place_id or use it to retrieve place details
-        // setPlaceId(place.place_id);
         logPlaceDetails(google, place.place_id);
       });
     };
@@ -53,24 +50,14 @@ function MapComponent(props) {
     loader
         .load()
         .then((google) => {
-            const map = new google.maps.Map(document.getElementById("map"), mapOptions);
-            const markerOptions = {
-                // position: { lat: 35.605507202533516, lng: 139.68411534103802 },
-                position: { lat: props.lat_val, lng: props.lng_val },
-                map: map,
-                title: 'My Marker',
-            };
-            new google.maps.Marker(markerOptions);
-
-            // initializeAutocomplete(google);
-            // logPlaceDetails(google);
-
+            initializeAutocomplete(google);
             setMapLoaded(true);    
         })
         .catch(error => {
             console.error(error);
         });
 
+    /* need debug? */
     // return () => {
     //   // Clean up the loaded Google Maps API when the component is unmounted
     //   loader.release();
@@ -79,10 +66,11 @@ function MapComponent(props) {
 
   return (
     <div>
+        <input type="text" id="autocomplete-input" placeholder="Enter a location" style={{width: '300px', border:'solid'}}/>
         <div id="map" style={{ width: '100%', height: '240px' }}></div>
         {!mapLoaded && <div>Loading map...</div>}
     </div>
   );
 }
 
-export default MapComponent;
+export default LocSearchComponent;

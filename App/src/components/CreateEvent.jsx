@@ -5,6 +5,7 @@ import { db, database } from "../Firebase";
 import { connectDatabaseEmulator, onValue, ref, set, push, update, unsubscribe } from "firebase/database";
 import TimePicker from 'react-time-picker';
 import { doc, addDoc, collection } from "firebase/firestore";
+import LocSearchComponent from "./LocSearchComponent";
 
 
 // Calendar
@@ -120,6 +121,7 @@ function Modal({ closeModal, userid }) {
                                             <label for="Event Location" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Location*</label>
                                             <input type="Event Location" name="Event Location" id="Event Location" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="Taki Plaza" value={eventLocation} onChange={(e) => setEventLocation(e.target.value)} required></input>
                                         </div>
+                                        <LocSearchComponent/>
                                         <div class="grid grid-cols-8 gap-4">
                                             <div class="md:col-span-5 col-span-4">
                                                 <label for="Event Date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date*</label>

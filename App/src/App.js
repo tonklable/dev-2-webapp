@@ -11,6 +11,7 @@ import UserSetupModal from './components/UserSetup';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { collection, getDoc, onSnapshot, doc } from "firebase/firestore";
 import MapComponent from './components/MapComponent';
+import LocSearchComponent from './components/LocSearchComponent';
 import DeleteEvent from './components/DeleteEvent';
 
 // function CreateUser(props) {
@@ -210,6 +211,9 @@ function EventList(props) {
   )
 };
 
+
+
+
 function App() {
 
   const [openModal, setOpenModal] = useState(false);
@@ -280,7 +284,9 @@ function App() {
         </div>
       ))} */}
 
-      <MapComponent />
+      {/* <MapComponent /> */}
+      {/* <MapComponent lat_val={35.605507202533516} lng_val={139.68411534103802}/> */}
+      <LocSearchComponent/>
 
     </div>
   );
