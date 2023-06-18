@@ -95,7 +95,8 @@ function FullPage(props) {
                                     <h1 class="text-left text-xl font-bold text-gray-900 dark:text-white">{ownername}<br /> {event.date} <br /> {event.time} <br /> {event.tag} <br /> {event.location} <br /> {event.food} <br /> {event.cost} <br /> {event.capacity}  </h1>
 
                                 </div>
-                                <MapComponent />
+                                {/* <MapComponent /> */}
+                                <MapComponent lat_val={35.605507202533516} lng_val={139.68411534103802}/>
                             </div>
                             <div class="h-full flex flex-col">
                                 <div class="mb-2 h-full flex flex-col">
