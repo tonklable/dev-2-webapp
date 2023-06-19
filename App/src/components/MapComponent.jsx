@@ -18,37 +18,35 @@ function MapComponent(props) {
         zoom: 15
     }
 
-    const logPlaceDetails = (google, placeId) => {
-      const service = new google.maps.places.PlacesService(document.getElementById('map'));
-      service.getDetails({
-        placeId: placeId
-      }, (place, status) => {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-          const map = new google.maps.Map(document.getElementById('map'), {
-            center: place.geometry.location,
-            zoom: 15
-          });
+    // const logPlaceDetails = (google, placeId) => {
+    //   const service = new google.maps.places.PlacesService(document.getElementById('map'));
+    //   service.getDetails({
+    //     placeId: placeId
+    //   }, (place, status) => {
+    //     if (status === google.maps.places.PlacesServiceStatus.OK) {
+    //       const map = new google.maps.Map(document.getElementById('map'), {
+    //         center: place.geometry.location,
+    //         zoom: 15
+    //       });
   
-          new google.maps.Marker({
-            map: map,
-            position: place.geometry.location
-          });
-        }
-      });
-    };
+    //       new google.maps.Marker({
+    //         map: map,
+    //         position: place.geometry.location
+    //       });
+    //     }
+    //   });
+    // };
 
-    const initializeAutocomplete = (google) => {
-      const input = document.getElementById('autocomplete-input');
-      const autocomplete = new google.maps.places.Autocomplete(input);
+    // const initializeAutocomplete = (google) => {
+    //   const input = document.getElementById('autocomplete-input');
+    //   const autocomplete = new google.maps.places.Autocomplete(input);
   
-      autocomplete.addListener('place_changed', () => {
-        const place = autocomplete.getPlace();
-        console.log('Place ID:', place.place_id);
-        // You can save the place_id or use it to retrieve place details
-        // setPlaceId(place.place_id);
-        logPlaceDetails(google, place.place_id);
-      });
-    };
+    //   autocomplete.addListener('place_changed', () => {
+    //     const place = autocomplete.getPlace();
+    //     console.log('Place ID:', place.place_id);
+    //     logPlaceDetails(google, place.place_id);
+    //   });
+    // };
 
     loader
         .load()
@@ -57,6 +55,7 @@ function MapComponent(props) {
             const markerOptions = {
                 // position: { lat: 35.605507202533516, lng: 139.68411534103802 },
                 position: { lat: props.lat_val, lng: props.lng_val },
+                position: props.geometry_location,
                 map: map,
                 title: 'My Marker',
             };
