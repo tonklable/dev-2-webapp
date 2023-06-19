@@ -42,7 +42,11 @@ function LocSearchComponent(props) {
   
       autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace();
-        console.log('Place ID:', place.place_id);
+        // console.log('Place ID:', place.place_id);
+        // console.log('Place ID:', place.geometry.location);
+        console.log('Place ID:', place);
+        console.log('Place Name:', place.name);
+        console.log('Place Address:', place.formatted_address);
         logPlaceDetails(google, place.place_id);
       });
     };
