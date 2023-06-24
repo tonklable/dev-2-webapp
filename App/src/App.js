@@ -170,6 +170,8 @@ function EventList(props) {
           ownerid: event.ownerid,
           name: event.name,
           location: event.location,
+          location_id: event.location_id,
+          address: event.address,
           date: event.date,
           capacity: event.capacity,
           food: event.food,
