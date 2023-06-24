@@ -64,7 +64,8 @@ export const CardSection = (props) => {
                                     <div class="absolute p-1 pl-0">
                                         <Location />
                                     </div>
-                                    <p class="text-[12px] ml-6">東京都目黒区大岡山</p>y
+                                    {/* <p class="text-[12px] ml-6">東京都目黒区大岡山</p>y */}
+                                    <p class="text-[12px] ml-6">{card.address}</p>
                                 </div>
                             </div>
                         </div>

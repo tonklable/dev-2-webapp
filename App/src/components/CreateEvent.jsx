@@ -68,8 +68,6 @@ function Modal({ closeModal, userid }) {
 
 
 
-
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         const eventsRef = collection(database, "events");
@@ -77,6 +75,8 @@ function Modal({ closeModal, userid }) {
         await addDoc(eventsRef, {
             name: eventName,
             location: eventLocation,
+            location_id: eventLocationId,
+            address: eventAddress,
             date: eventDate,
             time: eventTime,
             tag: eventTag,
@@ -96,6 +96,8 @@ function Modal({ closeModal, userid }) {
         setEventFood('')
         setEventCost('')
         setEventNote('')
+        setEventAddress('');
+        setEventLocationId('');
         window.location.reload()
     };
 
@@ -119,12 +121,12 @@ function Modal({ closeModal, userid }) {
                                             <label for="Event Name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name*</label>
                                             <input type="Event Name" name="Event Name" id="Event Name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="Tokodai Year-End Party" value={eventName} onChange={(e) => setEventName(e.target.value)} required></input>
                                         </div>
-                                        <div>
+                                        {/* <div>
                                             <label for="Event Location" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Location*</label>
                                             <input type="Event Location" name="Event Location" id="Event Location" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="Taki Plaza" value={eventLocation} onChange={(e) => setEventLocation(e.target.value)} required></input>
-                                        </div>
-                                        <LocSearchComponent/>
-                                        {/* <LocSearchComponent onChange={handleChangeLoc}/> */}
+                                        </div> */}
+                                        {/* <LocSearchComponent/> */}
+                                        <LocSearchComponent setEventLocationId={setEventLocationId} setEventLocation={setEventLocation} setEventAddress={setEventAddress}/>
                                         <div class="grid grid-cols-8 gap-4">
                                             <div class="md:col-span-5 col-span-4">
                                                 <label for="Event Date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date*</label>

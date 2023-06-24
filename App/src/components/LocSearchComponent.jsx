@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 
-function LocSearchComponent(props) {
+function LocSearchComponent({setEventAddress, setEventLocation, setEventLocationId}) {
   const [mapLoaded, setMapLoaded] = useState(false);
 
   useEffect(() => {
@@ -12,8 +12,8 @@ function LocSearchComponent(props) {
     });
 
     const mapOptions = {
-        // center : { lat: 35.605507202533516, lng: 139.68411534103802 },
-        center : { lat: props.lat_val, lng: props.lng_val },
+        center : { lat: 35.605507202533516, lng: 139.68411534103802 },
+        // center : { lat: props.lat_val, lng: props.lng_val },
         zoom: 15
     }
 
@@ -48,6 +48,9 @@ function LocSearchComponent(props) {
         console.log('Place Name:', place.name);
         console.log('Place Address:', place.formatted_address);
         logPlaceDetails(google, place.place_id);
+        setEventLocationId(place.place_id);
+        setEventLocation(place.name);
+        setEventAddress(place.formatted_address.split(',').slice(0, 2).join(',')); // show first two info of full address
       });
     };
 
