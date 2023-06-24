@@ -288,7 +288,7 @@ function App() {
 
       {/* <MapComponent /> */}
       {/* <MapComponent lat_val={35.605507202533516} lng_val={139.68411534103802}/> */}
-      <LocSearchComponent/>
+      {/* <LocSearchComponent/> */}
 
     </div>
   );

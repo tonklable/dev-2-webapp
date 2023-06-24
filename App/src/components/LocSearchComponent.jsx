@@ -73,7 +73,12 @@ function LocSearchComponent({setEventAddress, setEventLocation, setEventLocation
 
   return (
     <div>
-        <input type="text" id="autocomplete-input" placeholder="Enter a location" style={{width: '300px', border:'solid'}}/>
+        {/* <input type="text" id="autocomplete-input" placeholder="Enter a location" style={{width: '300px', border:'solid'}}/> */}
+        <div>
+          <label for="Event Location" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Location*</label>
+          <input type="Event Location" name="Event Location" id="autocomplete-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="search location" required></input>
+        </div>
+        <br></br>
         <div id="map" style={{ width: '100%', height: '240px' }}></div>
         {!mapLoaded && <div>Loading map...</div>}
     </div>
