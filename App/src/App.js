@@ -11,6 +11,7 @@ import UserSetupModal from './components/UserSetup';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { collection, getDoc, onSnapshot, doc } from "firebase/firestore";
 import MapComponent from './components/MapComponent';
+import LocSearchComponent from './components/LocSearchComponent';
 import DeleteEvent from './components/DeleteEvent';
 
 // function CreateUser(props) {
@@ -169,6 +170,8 @@ function EventList(props) {
           ownerid: event.ownerid,
           name: event.name,
           location: event.location,
+          location_id: event.location_id,
+          address: event.address,
           date: event.date,
           capacity: event.capacity,
           food: event.food,
@@ -209,6 +212,9 @@ function EventList(props) {
     </div>
   )
 };
+
+
+
 
 function App() {
 
@@ -280,7 +286,9 @@ function App() {
         </div>
       ))} */}
 
-      <MapComponent />
+      {/* <MapComponent /> */}
+      {/* <MapComponent lat_val={35.605507202533516} lng_val={139.68411534103802}/> */}
+      {/* <LocSearchComponent/> */}
 
     </div>
   );

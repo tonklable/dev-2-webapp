@@ -6,6 +6,9 @@ import MapComponent from "./MapComponent";
 
 function FullPage(props) {
     const event = props.events.find(event => event.id === props.pageID)
+    console.log("Location: ", event.location);
+    console.log("Address: ", event.address);
+    console.log("Location id: ", event.location_id);
 
     /* Fetch current user information (username) */
     const [username, setUsername] = useState("");
@@ -91,11 +94,13 @@ function FullPage(props) {
                             <div class="grid grid-cols-2 gap-3">
                                 <img src="https://static.onecms.io/wp-content/uploads/sites/43/2022/05/26/45921-crispy-and-creamy-doughnuts-ddmfs-638-3x4-1.jpg" alt="event pics" class="object-cover object-center h-full w-full " />
                                 <div class="grid grid-cols-2 gap-3">
-                                    <h1 class="text-left text-xl font-bold text-gray-900 dark:text-white">Party Owner: <br /> Party Date: <br /> Party Time: <br /> Tag: <br /> Location: <br />Food: <br /> Cost:  <br />Capacity:</h1>
-                                    <h1 class="text-left text-xl font-bold text-gray-900 dark:text-white">{ownername}<br /> {event.date} <br /> {event.time} <br /> {event.tag} <br /> {event.location} <br /> {event.food} <br /> {event.cost} <br /> {event.capacity}  </h1>
+                                    <h1 class="text-left text-xl font-bold text-gray-900 dark:text-white">Party Owner: <br /> Party Date: <br /> Party Time: <br /> Tag: <br /> Location: <br /> Address: <br />Food: <br /> Cost:  <br />Capacity:</h1>
+                                    <h1 class="text-left text-xl font-bold text-gray-900 dark:text-white">{ownername}<br /> {event.date} <br /> {event.time} <br /> {event.tag} <br /> {event.location} <br /> {event.address} <br /> {event.food} <br /> {event.cost} <br /> {event.capacity}  </h1>
 
                                 </div>
-                                <MapComponent />
+                                {/* <MapComponent /> */}
+                                {/* <MapComponent lat_val={35.605507202533516} lng_val={139.68411534103802}/> */}
+                                <MapComponent location_id={event.location_id}/>
                             </div>
                             <div class="h-full flex flex-col">
                                 <div class="mb-2 h-full flex flex-col">
