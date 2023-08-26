@@ -11,10 +11,18 @@ function LocSearchComponent({setEventAddress, setEventLocation, setEventLocation
       libraries: ['places']
     });
 
-    const mapOptions = {
-        center : { lat: 35.605507202533516, lng: 139.68411534103802 },
-        // center : { lat: props.lat_val, lng: props.lng_val },
+    const initializeMap = (google) => {
+      const initialLocation = { lat: 35.607486, lng: 139.685643 }; // initial loc (Ookayama sta.)
+      const map = new google.maps.Map(document.getElementById('map'), {
+        center: initialLocation,
         zoom: 15
+      });
+
+      // create a marker for the initial location
+      new google.maps.Marker({
+        map: map,
+        position: initialLocation
+      });
     }
 
     const logPlaceDetails = (google, placeId) => {
@@ -57,18 +65,13 @@ function LocSearchComponent({setEventAddress, setEventLocation, setEventLocation
     loader
         .load()
         .then((google) => {
+            initializeMap(google);
             initializeAutocomplete(google);
             setMapLoaded(true);    
         })
         .catch(error => {
             console.error(error);
         });
-
-    /* need debug? */
-    // return () => {
-    //   // Clean up the loaded Google Maps API when the component is unmounted
-    //   loader.release();
-    // };
   }, []);
 
   return (
