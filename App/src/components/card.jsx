@@ -81,7 +81,7 @@ export const CardSection = (props) => {
                                     <div class="absolute p-1 right-28">
                                         <UserGroup />
                                     </div>
-                                    <p class="text-[12px] mr-3">{card.attendees.length} attendees</p>
+                                    <p class="text-[12px] mr-3">{card.attendees.length+1} attendee(s)</p>
                                 </div>
                             </div>
                             <div class="flex justify-between">
