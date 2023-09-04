@@ -66,14 +66,14 @@ function FullPage(props) {
             getDoc(ownerRef).then((doc) => {
                 if (doc.exists()) {
                     setPartyOwner(doc.data().name);
-                } 
+                }
             }, (error) => {
                 console.error(error);
             });
         }
     });
 
-    
+
 
     return (
         <div>
@@ -93,21 +93,22 @@ function FullPage(props) {
 
                             <div class="grid grid-cols-2 gap-3">
                                 <img src="https://static.onecms.io/wp-content/uploads/sites/43/2022/05/26/45921-crispy-and-creamy-doughnuts-ddmfs-638-3x4-1.jpg" alt="event pics" class="object-cover object-center h-full w-full " />
-                                <div class="grid grid-cols-2 gap-3">
-                                    <h1 class="text-left text-xl font-bold text-gray-900 dark:text-white">Party Owner: <br /> Party Date: <br /> Party Time: <br /> Tag: <br /> Location: <br /> Address: <br />Food: <br /> Cost:  <br />Capacity:</h1>
-                                    <h1 class="text-left text-xl font-bold text-gray-900 dark:text-white">{ownername}<br /> {event.date} <br /> {event.time} <br /> {event.tag} <br /> {event.location} <br /> {event.address} <br /> {event.food} <br /> {event.cost} <br /> {event.capacity}  </h1>
+                                <div class="grid grid-cols-3 gap-3">
+                                    <h1 class="text-left text-l font-bold text-gray-900 dark:text-white">Party Owner: <br /> Party Date: <br /> Party Time: <br /> Tag: <br /> Location: <br /> Address: <br />Food: <br /> Cost:  <br />Capacity:</h1>
+                                    <h1 class="text-left text-l font-bold text-gray-900 dark:text-white">{ownername}<br /> {event.date} <br /> {event.time} <br /> {event.tag} <br /> {event.location} <br /> {event.address} <br /> {event.food} <br /> {event.cost} <br /> {event.capacity}  </h1>
 
                                 </div>
                                 {/* <MapComponent /> */}
                                 {/* <MapComponent lat_val={35.605507202533516} lng_val={139.68411534103802}/> */}
-                                <MapComponent location_id={event.location_id}/>
-                            </div>
-                            <div class="h-full flex flex-col">
+                                <MapComponent location_id={event.location_id} />
                                 <div class="mb-2 h-full flex flex-col">
                                     <label for="Note" class="block mt-2 mb-2 text-sm font-medium text-gray-900 dark:text-white">Note</label>
                                     <p class="w-full h-full flex p-2 border rounded focus:outline-none focus:ring-gray-300 focus:ring-1 whitespace-pre-wrap"> {event.note}</p>
                                 </div>
-                                <div className="flex space-x-4">
+                            </div>
+                            <div class="h-full flex flex-col">
+
+                                <div className="flex space-x-4 py-3">
                                     {!join && <button
                                         className="px-4 py-2 text-xl text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-md shadow-md transition-colors duration-200"
                                         onClick={joinSubmit}
